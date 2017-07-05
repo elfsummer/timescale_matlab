@@ -1,0 +1,63 @@
+% This function calculates the deep mole fracton of GeH4 given 
+% the value of K_eddy, eddy diffusion coefficient, and X_H2S,
+% mole fraction of H2S
+
+% changes: June 29, 2015,
+% changes: (1) GeH2 reaction constant new estimate
+
+clear all;
+close all;
+% get the T-P profile of Saturn
+[T_ref,P_ref,X_GeH4_eq_ref] = GeH4_eq_S();
+
+% do interpolation
+T = linspace(T_ref(1),T_ref(end),200);
+P = interp1(T_ref,P_ref,T,'cubic');
+X_GeH4_eq = interp1(T_ref,X_GeH4_eq_ref,T,'cubic');
+
+% constants
+RGAS=8.3145;
+KBOLTZ=1.38e-16;
+% Saturn
+X_H2=0.881;
+X_H2S = 3.76e-4*X_H2;
+% number density molecule/cm^3
+n = P*1e6./(KBOLTZ*T);
+% rate limiting step: GeH2 + H2S - H2Ge=S + H2
+% Fegley and Lodders (1994)
+% unit cm^3/s
+% uncetainty +-1000 K
+k = 1e-11*exp(-6000./T);
+
+% GeH4 = GeH2 + H2
+% no GeH2 data available, only delta_r_H = 147 kJ/mol (Ruscic 1990)
+% assume the change of Enthalpy in this reaction is independent
+% of temperature == the C_p change is 0
+% assume delta_S_0 (GeH2) approx ~ delta_S_0(GeH4), 
+% so delta_r_S = S_0_H2
+delta_r_H = 147;
+S_0_H2 = 0.16; % correspond to 800 K
+delta_r_S = S_0_H2;
+delta_r_G = delta_r_H - delta_r_S*T;
+
+K_eq = exp(-delta_r_G./(RGAS*1e-3*T));
+
+chemistry_timescale = (P*X_H2)./(k.*K_eq.*n*X_H2S);
+
+% pressure scale height
+mu = 2*X_H2 + 4*(1-X_H2);
+g = 10.44;
+H = RGAS*T/(mu*1e-3*g); % m
+
+L_eff = H;
+%L_eff = 0.12*H; 
+K_eddy = 1e8;
+dynamical_timescale=L_eff.^2*1e4/K_eddy;
+%find the quench level
+[min_value,quench_level] = min(abs(chemistry_timescale-dynamical_timescale));
+
+min_value
+quench_T = T(quench_level)
+X_GeH4_eq(quench_level)
+
+semilogx(chemistry_timescale,T,'*',dynamical_timescale,T,'*');

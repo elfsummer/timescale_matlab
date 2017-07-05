@@ -1,0 +1,125 @@
+clear all;
+close all;
+
+
+T_data = [600 650 700 750 800 850 900 950 1000 1050 1100 1150 1200 1250 1300 ...
+    1350 1400 1450 1500];
+PG_data = [138.33 181.70 234.00 296.30 369.74 455.55 555.04 669.65 800.88 ...
+    950.36 1119.83 1311.16 1526.32 1767.42 2036.68 2336.48 2669.30...
+    3037.79 3444.73];
+X_H2 = 0.881;
+X_P = 4.0e-6*X_H2;
+g = 10.44;
+alpha = 1.0;
+
+N_K_eddy = 30; 
+X_H2O = 9.8e-4*[1,10,20,30]*X_H2;
+N_H2O = length(X_H2O);
+K_eddy = 10.^linspace(3,13,N_K_eddy);
+X_PH3_quench = zeros(N_H2O,N_K_eddy);
+quench_T = zeros(N_H2O,N_K_eddy);
+for j=1:N_H2O
+for i=1:N_K_eddy
+    [X_PH3_quench(j,i), quench_T(j,i), quench_PG,k_1_f,T ] = XPH3_quench(T_data, PG_data,...
+    K_eddy(i), X_H2O(j), X_H2, X_P,g,alpha);
+end
+end
+
+% cover to mixing ratio
+q_PH3_quench = X_PH3_quench/X_H2;
+
+% for a variety of K
+figure()
+set(gca,'FontSize',14);
+semilogx(K_eddy,q_PH3_quench(1,:),'b','LineWidth',4);
+xlabel('$K_{\rm eddy}$ (cm$^2$ s$^{-1}$)','interpreter','latex')
+ylabel('mixing ratio','interpreter','latex')
+xlim([1e3,1e13])
+ylim([0e-6,6e-6])
+
+hold on;
+semilogx(K_eddy,q_PH3_quench(2,:),'k','LineWidth',3);
+semilogx(K_eddy,q_PH3_quench(3,:),'g','LineWidth',3);
+semilogx(K_eddy,q_PH3_quench(4,:),'r','LineWidth',3);
+
+% Create legend
+legend1 = legend('$E_{\rm H_2O}$ = 1','$E_{\rm H_2O}$ = 10','$E_{\rm H_2O}$ = 20',...
+    '$E_{\rm H_2O}$ = 30');
+
+set(legend1,'Interpreter','latex','YColor',[1 1 1],'XColor',[1 1 1],...
+    'Position',[0.622154017857143 0.301785714285715 0.266964285714286 0.321130952380952],...
+    'FontSize',12);
+
+% Create textbox
+annotation('textbox',...
+    [0.448214285714286 0.742857142857143 0.0875 0.0942380952380953],...
+    'Interpreter','latex',...
+    'String',{'PH$_3$'},...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FitBoxToText','off',...
+    'EdgeColor',[1 1 1]);
+
+% Create textbox
+annotation('textbox',...
+    [0.682499999999999 0.14904761904762 0.0875 0.0942380952380953],...
+    'Interpreter','latex',...
+    'String',{'Saturn'},...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FitBoxToText','off',...
+    'EdgeColor',[1 1 1]);
+
+%% add two horizontal lines
+hold on;
+semilogx(logspace(3,13,30),(4.0-1.0)*1e-6*ones(1,30),'k--','LineWidth',1);
+hold on;
+semilogx(logspace(3,13,30),(4.0+1.0)*1e-6*ones(1,30),'k--','LineWidth',1);
+
+%% add two vertical lines
+N_points = 30;
+x1 = 1e6*ones(1,N_points);
+x2 = 1e8*ones(1,N_points);
+y = linspace(0e-6,6e-6,N_points);
+hold on;
+semilogx(x1,y,'k--','LineWidth',1);
+hold on;
+semilogx(x2,y,'k--','LineWidth',1);
+
+% %% add simulation points
+% %% 10/20/30 times solar
+% K_eddy = [1e5,1e6,1e7];
+% X_PH3 = [6.25e-6 6.29e-6 6.30e-6;
+%     6.00e-6 6.09e-6 6.30e-6;
+%     5.32e-6 5.63e-6 5.79e-6];
+% X_H2 = [0.873 0.866 0.859];
+% q_PH3=zeros(3,3);
+% for i=1:3
+%     q_PH3(i,:)=X_PH3(i,:)/X_H2(i);
+% end
+% hold on;
+% semilogx(K_eddy,q_PH3(1,:),'k*','Markersize',16)
+% hold on;
+% semilogx(K_eddy,q_PH3(2,:),'g*','Markersize',16)
+% hold on;
+% semilogx(K_eddy,q_PH3(3,:),'r*','Markersize',16)
+
+%{
+%% fit the forward reaction rate for PO2 + H2O - HOPO2 + H
+n = length(T);
+A = [ones(n,1) -1./T'];
+b = log(k_1_f');
+x = A\b;
+
+%% plot quench temperature
+figure()
+set(gca,'FontSize',14);
+semilogx(K_eddy,quench_T(1,:),'b','LineWidth',4);
+xlabel('$K_{\rm eddy}$ (cm$^2$ s$^{-1}$)','interpreter','latex')
+ylabel('quench tempearature','interpreter','latex')
+
+hold on;
+semilogx(K_eddy,quench_T(2,:),'k','LineWidth',3);
+semilogx(K_eddy,quench_T(3,:),'g','LineWidth',3);
+semilogx(K_eddy,quench_T(4,:),'r','LineWidth',3);
+%}

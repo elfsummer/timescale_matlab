@@ -1,0 +1,106 @@
+% find effective length scale for GeH4 quenching
+% variables
+% for Jupiter
+% T_data = [450 500 550 600 650 700 750 800 850 900 950 1000 1050 1100 1150 1200 1250 1300 ...
+%     1350 1400 1450 1500];
+% PG_data = [26.11888627 37.28801102  51.47093862...
+%     69.10266133 90.64326221 116.5812512...
+%      147.4369918  183.7665559  226.1655185...
+%      275.2726254  331.7730034  396.4009975...
+%      469.9423185  553.2361601  647.1768949...
+%      752.7160803  870.8644035  1002.692785...
+%     1149.33307  1311.980671  1491.89799...
+%     1690.413976];
+% T = 500:0.1:1000;
+% PG = interp1(T_data,PG_data,T,'cubic');
+% X_H2 = 0.864;
+% X_H2S = 8.90e-5*X_H2;
+% enrich_factor = 4.4;
+% X_Ge = 8.93e-9*X_H2*enrich_factor;
+% g = 24.79;
+% K_eddy = 1e8;
+
+% variables for Saturn
+T_data = [400 450 500 550 600 650 700 750 800 850 900 950 1000 1050 1100 1150 1200 1250 1300 ...
+    1350 1400 1450 1500];
+PG_data = [34.89 52.02 74.41 102.88 138.33 181.70 234.00 296.30 369.74 455.55 555.04 669.65 800.88 ...
+    950.36 1119.83 1311.16 1526.32 1767.42 2036.68 2336.48 2669.30...
+    3037.79 3444.73];
+X_H2 = 0.881;
+X_H2S = 3.76e-4*X_H2;
+enrich_factor = 10.0;
+X_Ge = 8.93e-9*X_H2*enrich_factor;
+g = 10.44;
+T = 500:0.1:1000;
+PG = interp1(T_data,PG_data,T,'cubic');
+K_eddy = 1e7;
+
+% Constants
+% unit of R: kJ/mol/K
+Rgas = 8.3145e-3;
+KBOLTZ=1.38e-16;
+
+
+%% compute t_chem
+n=PG*1e6./(KBOLTZ*T); % unit molecule/cm^3
+% rate limiting step: GeH2 + H2S - H2Ge=S + H2
+% Fegley and Lodders (1994)
+% unit cm^3/s
+% uncetainty +-1000 K
+% k_f = 1e-11*exp(-6000./T);
+% rate limiting step: GeH2 + H2S - HGe=SH + H2
+k_f = 3.57e-14*T.^0.7.*exp(-4956./T);
+% GeH4 = GeH2 + H2
+a_GeH2 = [3.776667e+00,9.625977e-04,3.939253e-06,-3.805175e-09,...
+    1.022434e-12,2.881190e+04,4.605981e+00 ];
+b_GeH2 = [3.776667e+00,9.625977e-04,3.939253e-06,-3.805175e-09,...
+    1.022434e-12,2.881190e+04,4.605981e+00];
+[Cp_GeH2,H_GeH2,S_GeH2,G_GeH2] = evaluate_NASA_poly(a_GeH2,b_GeH2,T,'NASA7');
+% H2
+a_H2 = [2.344331120E+00,   7.980520750E-03, ...
+               -1.947815100E-05,   2.015720940E-08,  -7.376117610E-12,...
+               -9.179351730E+02,   6.830102380E-01 ];
+b_H2 = [2.932865790E+00,   8.266079670E-04, ...
+               -1.464023350E-07,   1.541003590E-11,  -6.888044320E-16, ...
+               -8.130655970E+02,  -1.024328870E+00 ];
+[Cp_H2,H_H2,S_H2,G_H2] = evaluate_NASA_poly(a_H2,b_H2,T,'NASA7');
+% GeH4
+a_GeH4 = [2.54992789E+00 7.13885765E-03 1.43758337E-05   ...
+-2.33592977E-08 9.65676013E-12 9.69756465E+03 9.02678812E+00 ];
+b_GeH4 = [ 5.41474159E+00 7.24155154E-03 -2.71818301E-06 4.51535021E-10...
+    -2.75635275E-14 8.46356611E+03 -7.83419271E+00 ];
+[Cp_GeH4,H_GeH4,S_GeH4,G_GeH4] = evaluate_NASA_poly(a_GeH4,b_GeH4,T,'NASA7');
+delta_r_G = G_GeH2 + G_H2 - G_GeH4;
+K_eq = exp(-delta_r_G./(Rgas*T));
+t_chem = (PG*X_H2)./(k_f.*K_eq.*n*X_H2S);
+
+%% compute mixing timescale
+% calculate pressure scale height
+mu = X_H2*2 + (1-X_H2)*4;
+% scale height (~km)
+H = Rgas*T/(mu*1e-3*g);
+
+t_mix = H.^2*1e10/K_eddy;
+
+%% find the quench level
+% find the quench level
+[min_value,quench_level]=min(abs(t_mix-t_chem));
+
+%% follow the recipe
+xi = log(t_chem./t_mix);
+L_ratio = -H(quench_level)*(log(PG(quench_level+1))-log(PG(quench_level-1)))/(xi(quench_level+1)-xi(quench_level-1));
+
+f_eq1 = GeH4_eq_J(T(quench_level-1));
+
+f_eq2 = GeH4_eq_J(T(quench_level+1));
+
+alpha = (log(f_eq2) - log(f_eq1))/(log(PG(quench_level+1))-log(PG(quench_level-1)));
+
+x = alpha*L_ratio/H(quench_level); 
+
+%% Jupiter: use the figure in Smith 1998 to find out L_eff/L_ratio
+% which is about 1.5
+% calculate L_ratio/H at quench level,which is about 0.0836,
+% then the L_eff is about 0.12 times H
+
+%% using the same method, the L_eff/H is about 0.11

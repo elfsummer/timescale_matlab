@@ -1,0 +1,402 @@
+.conformer
+{
+	background-color:Aqua;
+	text-align:center;
+	border-style:groove;
+}	
+CAPTION 
+{ 
+  WHITE-SPACE: nowrap;
+  text-align: left; 
+  font-weight: bold; 
+  font-size:larger;
+}
+.nowrap
+{
+    WHITE-SPACE: nowrap
+}
+.mb
+{
+	white-space:nowrap
+}	
+.nobr
+{
+	white-space:pre;
+}	
+.green
+{
+    COLOR: green
+}
+.blue
+{
+    COLOR: blue
+}
+.red
+{
+    COLOR: red
+}
+.yellow
+{
+    COLOR: yellow
+}
+.center
+{
+    TEXT-ALIGN: center
+}
+.right
+{
+    TEXT-ALIGN: right
+}
+.left
+{
+	text-align: left;
+}	
+TD.num
+{
+    WHITE-SPACE: nowrap;
+    TEXT-ALIGN: right
+}
+TD.vtop
+{
+	vertical-align: top;
+}	
+UL.a
+{
+    FONT-SIZE: 150%
+}
+UL.b
+{
+    FONT-SIZE: 80%
+}
+.cyanback
+{
+    FONT-WEIGHT: bolder
+}
+.yellowback
+{
+    BORDER-RIGHT: medium none;
+    BORDER-TOP: medium none;
+    FONT-WEIGHT: bolder;
+    BORDER-LEFT: medium none;
+    BORDER-BOTTOM: medium none
+}
+.pinkback
+{
+    BACKGROUND-COLOR:bisque
+}
+.colored
+{
+    BACKGROUND-COLOR: lightcyan
+}
+.blueback
+{
+    BACKGROUND-COLOR: lightcyan
+}
+.greenback
+{
+    BACKGROUND-COLOR: lightgreen
+}
+.classa
+{
+    BACKGROUND-COLOR: lightcyan
+}
+.classb
+{
+    BACKGROUND-COLOR: yellow
+}
+.gray
+{
+    COLOR: gray
+}
+.silver
+{
+    COLOR: silver
+}
+.palegreenback
+{
+    BACKGROUND-COLOR: #e0ffe0
+}
+TD.ref
+{
+    WHITE-SPACE: nowrap
+}
+TD.exper
+{
+    COLOR: green;
+}
+TD.theory
+{
+    COLOR: blue;
+}
+TH.theory
+{
+    COLOR: blue
+}
+TH.exper
+{
+    COLOR: green
+}
+.exper_pg
+{
+    COLOR: green;
+    TEXT-ALIGN: center
+}
+.theory_pg
+{
+    COLOR: blue;
+    TEXT-ALIGN: center
+}
+.exper_text
+{
+    COLOR: green
+}
+.theory_text
+{
+    COLOR: blue
+}
+.expernum
+{
+    COLOR: green;
+    TEXT-ALIGN: right
+}
+.theorynum
+{
+    COLOR: blue;
+    TEXT-ALIGN: right
+}
+.purple
+{
+    COLOR: purple
+}
+TR.italic
+{
+    FONT-STYLE: italic
+}
+.viba
+{
+    BACKGROUND-COLOR: lightcyan;
+    TEXT-ALIGN: right
+}
+.vibb
+{
+    BACKGROUND-COLOR: yellow;
+    TEXT-ALIGN: right
+}
+TR.palegreenback
+{
+    BACKGROUND-COLOR: #e0ffe0
+}
+TR.paleblueback
+{
+    BACKGROUND-COLOR: #e0ffff
+}
+TR.palepurpleback
+{
+    BACKGROUND-COLOR: #e0e0ff
+}
+TR.palepinkback
+{
+    BACKGROUND-COLOR: #ffe0ff
+}
+TR.paleyellowback
+{
+    BACKGROUND-COLOR: #ffffef
+}
+TR.whiteback
+{
+    BACKGROUND-COLOR: white
+}
+.h1
+{
+    FONT-SIZE: x-large
+}
+.energyback
+{
+    BACKGROUND-COLOR: #ffffc0
+}
+.vibback
+{
+    BACKGROUND-COLOR: #ffbfff
+}
+.geomback
+{
+    BACKGROUND-COLOR: #bfffbf
+}
+.elecback
+{
+    BACKGROUND-COLOR: #cccc00
+}
+.entropyback
+{
+    BACKGROUND-COLOR: #ffbfbf
+}
+.rotback
+{
+	BACKGROUND-COLOR: #CCFFFF
+}
+.chargeback
+{
+	background-color:#CCCC00
+}
+.infoback
+{
+	background-color:black;
+	color:white;
+}
+.introtback
+{
+	background-color:#ffaa00;
+}		
+.tsback
+{
+	background-color:#CC66FF;
+}		
+.h2
+{
+    FONT-SIZE: large;
+    Font-Weight: bold;
+}
+.h3
+{
+    FONT-SIZE: medium;
+}
+.h4
+{
+    FONT-SIZE: small
+}
+.elevelsback { background-color: #ccc }
+Table.guide 
+{ 
+	background-color: #ADD8E6;
+	background-color: #9DC8D6;
+}
+.bgc 
+{	
+  background-color: #9DC8D6;
+}
+div.box
+{
+	border-style:ridge;
+	border-width: medium;
+}
+.strong
+{
+	font-size:120%;
+	font-weight:bold;
+}
+.small
+{
+	font-size:70%;
+	font-family:Sans-Serif;
+}	
+.bordered
+{
+	border-color: Maroon;
+	border-style:solid;
+}
+.whiteblue
+{
+	 background-image: url(images/whiteblue.bmp);
+	 background-repeat: repeat-x;
+}
+.donor
+{
+	background-color:#FFFFCC;
+}
+.acceptor
+{
+	background-color:#CCE5FF;
+}
+.debug
+{
+	background-color:Yellow;
+	border-width:medium;
+	color:Navy;
+}	
+.si
+{
+	color: Purple;
+	font-weight:bold;
+}
+.nonsi
+{
+	color: Olive;
+	font-weight:bold;
+}
+.compare
+{
+	border-style:solid;
+}
+TD.sym
+{
+	 text-align:center;
+}
+TD.bsmall
+{
+	background-color:#FFFFCC;
+}
+TD.bmedium
+{
+	background-color:#CCFFFF;
+}
+TD.blarge
+{
+	background-color:#FFCCFF;
+}
+TD.bpople
+{
+	background-color:#FFCCCC;
+}
+TD.bdunning
+{
+	background-color:#CCFFCC;
+}TD.becp
+{
+	background-color:#CCCCFF;
+}
+  .ccc1 {
+    background-color:#FFFFDD;
+  }
+  .ccc2 {
+    background-color:#FFDDDD;
+  }
+  .ccc3 {
+    background-color:#DDFFDD;
+  }
+  .ccc4 {
+    background-color:#FFDDFF;
+  }
+  .ccc5 {
+    background-color:#DDDDFF;
+  }
+  .ccc6 {
+    background-color:#DDFFFF;
+  }
+  .tca { background-color:#008800; color:#FFFFFF}
+  .tcb { background-color:#880000; color:#FFFFFF}
+  .tcc { background-color:#000088; color:#FFFFFF}
+  .tcd { background-color:#008888; color:#FFFFFF}
+  .tce { background-color:#888800; color:#FFFFFF}
+  .tcf { background-color:#880088; color:#FFFFFF}
+  .tcg { background-color:#888888; color:#FFFFFF}
+  .tch { background-color:#000000; color:#FFFFFF}
+  
+.unittype 
+{
+	color: #7E2217;
+	font-style:italic;
+}	
+.neutral {
+  background-color:#AAAAFF;
+}
+.cation {		
+  background-color:#FFAAAA;
+}
+.clicker {
+	border: solid 1px;
+	background-color: lightgray;
+}
+.calcbox {
+	border: solid;
+	background-color: #EEEEEE;
+}

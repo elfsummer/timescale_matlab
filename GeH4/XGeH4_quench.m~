@@ -1,0 +1,52 @@
+function [XGeH4_quench, quench_T, quench_PG] = XGeH4_quench(T_data, PG_data, ...
+    K_eddy, X_H2S, X_H2, X_Ge, g)
+% compute quenched abundance of GeH4 for a given adiabat
+
+T = T_data(1):0.1:T_data(end);
+PG = interp1(T_data,PG_data,T,'cubic');
+
+Rgas = 8.3145e-3;
+KBOLTZ=1.38e-16;
+
+% compute t_chem
+n=PG*1e6./(KBOLTZ*T); % unit molecule/cm^3
+
+% rate limiting step: GeH2 + H2S - H2Ge=S + H2
+% Fegley and Lodders (1994)
+% unit cm^3/s
+% uncetainty +-1000 K
+% k_f = 1e-11*exp(-6000./T);
+
+% rate limiting step: GeH2 + H2S - HGe=SH + H2
+k_f = 3.57e-14*T.^0.7.*exp(-4956./T);
+
+% GeH4 = GeH2 + H2
+delta_r_H = 147;
+S_0_H2 = 0.16; % correspond to 800 K
+S_0_H2 = 0.14;
+delta_r_S = S_0_H2;
+delta_r_G = delta_r_H - delta_r_S*T;
+
+K_eq = exp(-delta_r_G./(Rgas*T));
+
+t_chem = (PG*X_H2)./(k_f.*K_eq.*n*X_H2S);
+
+% compute mixing timescale
+% calculate pressure scale height
+mu = X_H2*2 + (1-X_H2)*4;
+% scale height (~km)
+H = Rgas*T/(mu*1e-3*g);
+
+L_eff = 0.1*H;
+
+t_mix = L_eff.^2*1e10/K_eddy;
+
+%semilogx(t_chem,T,t_mix,T);
+
+%find the quench level
+[min_value,quench_level]=min(abs(t_chem-t_mix));
+%XGeH4_quench=GeH4equ(T(quench_level),PG(quench_level),X_H2,X_H2S,X_Ge);
+XGeH4_quench=GeH4_eq_S(T(quench_level));
+quench_T = T(quench_level);
+quench_PG = PG(quench_level);
+

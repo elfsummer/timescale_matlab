@@ -1,0 +1,85 @@
+clear all;
+close all;
+
+% evualting at the temperature 
+T = [400,500,600,700,800,900,1000];
+% evaluation of thermal properties
+% gas constant kJ/mol/K
+R_gas = 8.3145e-3;
+
+% NASA polynomial
+% CO: 200 - 1000 K
+a = [3.579533470E+00,  -6.103536800E-04, ...
+                1.016814330E-06,   9.070058840E-10,  -9.044244990E-13,...
+               -1.434408600E+04,   3.508409280E+00];
+% heat capacity
+Cp_0_CO = R_gas*(a(1) + a(2)*T + a(3)*T.^2 + ...
+    a(4)*T.^3 + a(5)*T.^4);
+% enthalpy
+H_0_CO = R_gas*T.*(a(1) + a(2)*T/2+ a(3)*T.^2/3 +a(4)*T.^3/4 +...
+    a(5)*T.^4/5 + a(6)./T);
+% entropy
+S_0_CO = R_gas*(a(1)*log(T) + a(2)*T + a(3)*T.^2/2 + a(4)*T.^3/3 ...
+    + a(5)*T.^4/4 + a(7));
+
+G_0_CO = H_0_CO - T.*S_0_CO;
+
+% H2
+% 200- 1000K
+a = [ 2.344331120E+00,   7.980520750E-03, ...
+               -1.947815100E-05,   2.015720940E-08,  -7.376117610E-12,...
+               -9.179351730E+02,   6.830102380E-01];
+
+% heat capacity
+Cp_0_H2 = R_gas*(a(1) + a(2)*T + a(3)*T.^2 + ...
+    a(4)*T.^3 + a(5)*T.^4);
+% enthalpy
+H_0_H2 = R_gas*T.*(a(1) + a(2)*T/2+ a(3)*T.^2/3 +a(4)*T.^3/4 +...
+    a(5)*T.^4/5 + a(6)./T);
+% entropy
+S_0_H2 = R_gas*(a(1)*log(T) + a(2)*T + a(3)*T.^2/2 + a(4)*T.^3/3 ...
+    + a(5)*T.^4/4 + a(7));
+
+G_0_H2 = H_0_H2 - T.*S_0_H2;
+
+% H2CO
+a = [4.79372312E+00, -9.90833322E-03, ...
+               3.73219990E-05, -3.79285237E-08, 1.31772641E-11, ...
+              -1.43791953E+04, 6.02798058E-01];
+
+% heat capacity
+Cp_0_H2CO = R_gas*(a(1) + a(2)*T + a(3)*T.^2 + ...
+    a(4)*T.^3 + a(5)*T.^4);
+% enthalpy
+H_0_H2CO = R_gas*T.*(a(1) + a(2)*T/2+ a(3)*T.^2/3 +a(4)*T.^3/4 +...
+    a(5)*T.^4/5 + a(6)./T);
+% entropy
+S_0_H2CO = R_gas*(a(1)*log(T) + a(2)*T + a(3)*T.^2/2 + a(4)*T.^3/3 ...
+    + a(5)*T.^4/4 + a(7));
+
+G_0_H2CO = H_0_H2CO - T.*S_0_H2CO;
+
+% CO + H2 = H2CO
+delta_G = G_0_H2CO - G_0_CO - G_0_H2;
+
+
+% comparison with another way: at 500 K
+delta_f_G_H2CO = [-107.615, -104.923, -101.917,-98.675,-95.259,-91.712,-88.068];
+delta_f_G_CO = [-146.338, -155.414, -164.486, 173.518, -182.497, -191.416, -200.275];	
+delta_f_G_H2 = 0;
+delta_r_G = delta_f_G_H2CO - delta_f_G_CO -delta_f_G_H2;
+
+% conclusion
+% delta_f_G - delta_G = 7, so there is a shift of 7, maybe due to the error
+% in reference point, but this demonstrates that using G_0 in this way is
+% correct. 
+
+
+% gibbs helmholtz equation
+T1 = 500; 
+T2 = 1000;
+delta_r_G_T1 = delta_r_G(2);
+% compute delta_H from JANAF
+delta_r_H = -112.057-(-113.8);
+delta_r_G_T2 = (delta_r_G_T1/T1 + delta_r_H*(1/T2-1/T1))*T2;
+

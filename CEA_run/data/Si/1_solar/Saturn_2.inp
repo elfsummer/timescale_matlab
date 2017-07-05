@@ -1,0 +1,30 @@
+prob
+case=saturn tp 
+t,k= 800,850,900,950,1000,1050,1100,1150,1200,1250
+p,bar= 369.74, 455.55, 555.05, 669.65, 800.88, 950.36, 1119.83, 1311.16, 1526.32, 1767.42 
+react 
+  name=H2 moles=1.0
+  name=He moles=0.135
+#  name=CH4 moles=5.33e-3
+  name=N2 moles = 2.27e-4
+  name=H2S moles=3.76e-4
+#  name=PH3 moles = 7.28e-6 
+
+# one time solar water
+  name=O2 moles = 4.9e-4
+# all others are ten time solar
+  name=HF moles = 7.26e-7
+#  name=Na moles = 3.48e-5
+  name=Mg moles = 7.96e-4
+  name=Si moles=6.47e-4
+
+  name=HCL moles = 6.32e-6
+#  name=K moles = 2.14e-6
+#  name=Ca moles = 4.38e-5
+#  name=GeH4 moles = 8.93e-8
+  name=HBr moles=6.93e-9
+
+output    trace=1e-15
+plot t p Si2N2O(cr) Mg2SiO4(cr) MgSiO3(I) MgSiO3(II) MgSiO3(III) MgSiO3(L) SiO2 SiO SiH4 SiH3 SiH2 
+
+end

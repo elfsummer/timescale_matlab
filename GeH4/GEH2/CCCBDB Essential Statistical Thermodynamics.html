@@ -1,0 +1,1333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0038)http://cccbdb.nist.gov/thermo.asp#ref1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<script type="text/javascript" async="" src="./CCCBDB Essential Statistical Thermodynamics_files/ga.js"></script><script language="JavaScript" id="_fed_an_js_tag" src="./CCCBDB Essential Statistical Thermodynamics_files/federated-analytics.all.min.js"></script><style type="text/css"></style>
+
+<title>CCCBDB Essential Statistical Thermodynamics</title>
+<link rel="stylesheet" type="text/css" href="./CCCBDB Essential Statistical Thermodynamics_files/cccbdb.css">
+</head>
+
+<body>
+<table>
+<tbody><tr>
+<td>
+<a href="http://cccbdb.nist.gov/default.htm" target="_parent">
+<img src="./CCCBDB Essential Statistical Thermodynamics_files/cccbdb_logosmall.gif" alt="return to home page" title="Computational Chemistry Comparison and Benchmark Database" width="42" height="64">
+</a>
+</td>
+
+
+<td><h1><a title="introduction" href="http://cccbdb.nist.gov/intro.asp">I</a>.<a title="introduction" href="http://cccbdb.nist.gov/intro.asp#D">D</a>.2. (<a title="units and tutorials" href="http://cccbdb.nist.gov/other.asp">VII</a>.<a title="units and tutorials" href="http://cccbdb.nist.gov/other.asp#C">C</a>.6.) </h1></td>
+
+
+
+</tr>
+</tbody></table>
+
+<h1>Thermochemistry</h1>
+The following has been adapted from 
+<i>Computational thermochemistry: prediction amd estimation of molecular thermodynamics</i> 
+Irikura, K.K.; Frurip, D. J., Eds.;
+American Chemical Society, 1998.
+
+<p>
+</p><h2>Appendix B</h2>
+<h2>Essential Statistical Thermodynamics</h2>
+<p><b>Karl K. Irikura</b>
+<br>Physical and Chemical Properties Division, 
+<br>National Institute of Standards and Technology, Gaithersburg, MD 20899
+</p><p>Some computational methods, particularly <i>ab initio</i> techniques, 
+produce detailed molecular information but no thermodynamic information directly. 
+Further calculations are needed to generate familiar, 
+ideal-gas quantities such as the standard molar entropy (<i>S</i>°), 
+heat capacity (<i>C<sub>p</sub></i>°), 
+and enthalpy change [<i>H</i>° (<i>T</i>)-<i>H</i>° (0)]. 
+This Appendix details the necessary procedures, including worked examples. 
+Thermochemical calculations can be extended to transition states of chemical reactions. 
+Procedures are provided for converting such information into rate constants. 
+Tables are also provided for unit conversions and physical constants. 
+
+</p><p>Statistical thermodynamics calculations are necessary to compute properties as functions of temperature. 
+In some computations, such as <i>ab initio</i> electronic calculations of molecular energy, 
+the raw results do not even correspond to properties at absolute zero temperature 
+and must always be corrected. 
+All the corrections are based upon molecular spectroscopy, 
+with temperature-dependence implicit in the molecular partition function, <i>Q</i>. 
+The partition function is used not only for theoretical predictions, 
+but also to generate most published thermochemical tables. 
+Many data compilations include descriptions of calculational procedures (<a href="./CCCBDB Essential Statistical Thermodynamics_files/CCCBDB Essential Statistical Thermodynamics.html"><i>1-3</i></a>).
+
+</p><p><b>Corrections Unique to <i>Ab Initio</i> Predictions</b>
+</p><p>By convention, energies from <i>ab initio</i> calculations are reported in hartrees, 
+the atomic unit of energy (1 hartree = 2625.5 kJ/mol = 627.51 kcal/mol = 219474.6 cm<sup>-1</sup>) 
+(<a href="http://cccbdb.nist.gov/thermo.asp#ref4"><i>4</i></a>). 
+These energies are negative, with the defined zero of energy being the fully-dissociated limit 
+(free electrons and bare nuclei). 
+<i>Ab initio</i> models also invoke the approximation that the atomic nuclei are stationary, 
+with the electrons swarming about them. 
+This is a good approximation because nuclei are much heavier than electrons. 
+Consequently, the resulting energies are for a hypothetical, non-vibrating molecule. 
+Although oscillators may be at rest in classical mechanics, 
+real (quantum-mechanical) oscillators are always in motion. 
+The small residual motion at absolute zero temperature is the <i>zero-point vibrational energy</i>, 
+abbreviated ZPVE or ZPE. 
+For a simple harmonic oscillator, the ZPE equals one-half the vibrational frequency. 
+Although all real molecular vibrations are at least slightly anharmonic, 
+they are usually approximated as harmonic. 
+Thus, the molecule's ZPE may be taken as one-half the sum of the vibrational frequencies. 
+
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/Image1.gif" width="106" height="49" alt="zpe equals 1/2 times the sum of nu sub i"></td>
+<td>Eq. 1</td>
+</tr>
+</tbody></table>
+
+<p>In equation 1, <i>N</i> is the number of atoms in the molecule 
+and the v<i><sub>i</sub></i> are the fundamental vibrational frequencies. 
+There are 3<i>N</i>-6 vibrations in a non-linear molecule and 3<i>N</i>-5 in a linear molecule; 
+equation 1 is for the more common non-linear case. 
+The ZPE must be added to the raw <i>ab initio</i> energy to obtain 
+an energy corresponding to absolute zero temperature, <i>T</i> = 0 K. 
+</p><p>In practice, the ZPE correction is slightly complicated 
+by the observation that <i>ab initio</i> vibrational frequencies are often in error by +5% to +10%. 
+To compensate for this error, the computed frequencies are usually multiplied by empirical scaling factors. 
+The most recent recommendations are those of Scott and Radom (<a href="http://cccbdb.nist.gov/thermo.asp#ref5"><i>5</i></a>). 
+For example, they suggest scaling HF/6-31G* frequencies 
+by 0.8953 to predict vibrational spectra (i.e., fundamental frequencies), 
+by 0.9135 for the computation of ZPEs, 
+by 0.8905 to predict enthalpy differences <i>H° </i>(298.15) - <i>H</i>° (0), 
+and by 0.8978 to predict <i>S</i>°(298.15). 
+The methods for computing these quantities are described below. 
+Common abbreviations and acronyms of the <i>ab initio</i> literature are defined 
+in the glossary (<a href="http://cccbdb.nist.gov/glossary.asp">Appendix D</a>) of this book. 
+In this Appendix, the degree sign (°) that indicates ideality and standard pressure (1 bar) 
+is omitted except where the thermal electron convention for ions is being emphasized (see below).
+
+</p><p>Enthalpies of formation depend upon the thermodynamic conventions for reference states of the elements. 
+Since this information is not intrinsic to an isolated molecule, 
+an <i>ab initio</i> reaction energy (i.e., energies for at least two molecules) 
+must be combined with experimental data to compute an enthalpy of formation, 
+&#916;<sub>f</sub><i>H</i>°. </p>
+
+<p><b>Example: &#916;<sub>f</sub><i>H</i>°<sub>0</sub> 
+of hydrogen fluoride.</b> 
+<br>There are many levels of approximation in <i>ab initio</i> theory; 
+several are described in the chapters of this book. 
+For the present example, we choose the CCSD(T)/aug-cc-pVTZ//B3LYP/6-31G(d) level. 
+The notation indicates that (1) molecular geometries are calculated 
+at the density-functional B3LYP level using the 6-31G(d) basis set 
+and (2) molecular electronic energies are calculated 
+at the high CCSD(T) level of theory using the rather large aug-cc-pVTZ basis set. 
+To compute an enthalpy of formation for HF, 
+we must also choose a balanced chemical reaction for which to calculate an energy. 
+We choose arbitrarily the reaction shown in equation 2. 
+<br>
+</p><table align="CENTER">
+<tbody><tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image2.gif" width="102" height="22" alt="H2 + F2 right arrow 2HF"></td>
+    <td>Eq. 2</td>
+</tr>
+</tbody></table>
+
+<p>Note that the ideal-gas energy and enthalpy are equal at 0 K, 
+since H = E + PV = E + <i>n</i>RT = E. 
+The optimized B3LYP/6-31G(d) bond lengths are 0.743, 1.404, and 0.934 Å
+for H<sub>2</sub>, F<sub>2</sub>, and HF respectively, 
+in reasonably good agreement with the experimentally derived values 
+<i>r<sub>e</sub></i> = 0.741, 1.412, and 0.917 Å respectively (<a href="http://cccbdb.nist.gov/thermo.asp#ref6"><i>6</i></a>). 
+The calculated (harmonic) B3LYP/6-31G(d) vibrational frequencies 
+are 4451, 1064, and 3978 <span class="nowrap">cm<sup>-1</sup></span> 
+for H<sub>2</sub>, F<sub>2</sub>, and HF respectively, 
+in modest agreement with the experimentally derived harmonic frequencies 
+&#969;<i><sub>e</sub></i> = 4401, 917, and 4138 <span class="nowrap">cm<sup>-1</sup></span> 
+respectively (<a href="http://cccbdb.nist.gov/thermo.asp#ref6"><i>6</i></a>). 
+Since 1 cm<sup>-1</sup> equals only 0.01196 kJ/mol, 
+small errors in ZPE will not cause significant errors in the final enthalpy of formation. 
+Scaling the calculated frequencies by 0.9806 (<a href="http://cccbdb.nist.gov/thermo.asp#ref5"><i>5</i></a>) 
+and substituting them into equation 1 yields 
+ZPE = 2182, 522, and 1950 cm<sup>-1</sup> = 0.009943, 0.002377, and 0.008887 hartree 
+for H<sub>2</sub>, F<sub>2</sub>, and HF respectively. 
+At these optimized geometries, 
+the CCSD(T)/aug-cc-pVTZ energies are <i>E</i><sub>e</sub> = -1.172636, -199.313519, and -100.349402 hartree 
+for H<sub>2</sub>, F<sub>2</sub>, and HF respectively. 
+Adding the ZPEs thus leads to enthalpies (or energies) at <i>T</i> = 0 K of 
+<i>E</i><sub>0</sub> = -1.162693, -199.311142, and -100.340515 hartree 
+for H<sub>2</sub>, F<sub>2</sub>, and HF respectively. 
+The calculated enthalpy change is then 
+&#916;<sub>r</sub><i>H</i>°<sub>0</sub>(reaction 2) = -0.207194 hartree = -544.0 kJ/mol. 
+Using the experimental (defined, in these cases) enthalpies of formation 
+for H<sub>2</sub> and F<sub>2</sub> of 0 and 0 kJ/mol (<a href="./CCCBDB Essential Statistical Thermodynamics_files/CCCBDB Essential Statistical Thermodynamics.html"><i>1</i></a>), 
+we obtain &#916;<sub>f</sub><i>H</i>°<sub>0</sub>(HF) = -272.0 kJ/mol. 
+This is in good agreement with the experimental value of -272.5 ± 0.8 kJ/mol (<a href="./CCCBDB Essential Statistical Thermodynamics_files/CCCBDB Essential Statistical Thermodynamics.html"><i>1</i></a>). 
+All the <i>ab initio</i> calculations for this example were done on a personal computer.
+
+</p><p><b>General Relationships of Statistical Thermodynamics</b>
+
+</p><p>In the present context, 
+statistical thermodynamics is meant to include the methods 
+used to convert molecular energy levels into macroscopic properties, 
+especially enthalpies, entropies, and heat capacities. 
+Molecular energy levels arise from molecular translation 
+(i.e., motion through space), rotation, vibration, and electronic excitation. 
+This information constitutes the spectroscopy of the molecule of interest 
+and can be obtained experimentally or from calculations.
+
+</p><p><b>Partition Function.</b> 
+The molecular energy levels &#949;<i><sub>i</sub></i> 
+are used to compute the <i>molecular partition function</i>, 
+usually denoted by the symbol <i>Q</i>, as shown in equation 3. 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image3.gif" width="154" height="38" alt="Q(T)=sum(exp(-epsilon sub i over kt))"></td>
+<td>Eq. 3</td>
+</tr>
+</tbody></table>
+
+The sum extends over all energy levels. 
+(Sometimes this sum is written only over all unique energy levels, 
+in which case a level degeneracy <i>g<sub>i</sub></i> 
+must be included in the sum.) 
+However, for very high temperatures at which the molecule becomes unstable, 
+the extent of the sum may be ambiguous. 
+Tabulated thermochemical data must be used with caution under such conditions; 
+the values (1) may depend strongly upon the high-energy cutoff procedure adopted 
+and (2) may deviate implicitly from the ideal-gas model.
+
+<p>One typically chooses the lowest energy level to be the zero of energy, 
+so that no levels lie at negative energies. 
+From equation 3 it follows that the largest contributions to 
+<i>Q</i>&nbsp;are from the lowest energy levels. 
+Conversely, levels that lie far above <i>kT</i> (207 cm<sup>-1</sup> 
+at room temperature) have only a minor effect on 
+<i>Q</i>&nbsp;and its derivative thermodynamic quantities.
+
+</p><p><b>Thermodynamic Functions.</b> 
+Given the partition function, 
+the usual molar thermodynamic functions can be calculated based upon the following general equations. 
+
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image4.gif" align="LEFT" width="200" height="45" alt="S = Nk(partial derivative with respect to T (T ln(Q)) - ln(N) +1)"></td>
+<td> Eq. 4</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image5.gif" align="LEFT" width="150" height="45" alt="Cv = NkT(second partial derivative with respect to T (Tln(Q))"></td>
+<td> Eq. 5</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image6.gif" align="LEFT" width="82" height="22" alt="Cp = Cv + R"></td>
+<td> Eq. 6</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image7.gif" align="LEFT" width="260" height="56" alt="H(T)-H(0)=integral from 0 to T (Cp dT) = R T^2/Q partial derivative with respect to T (Q) + RT"></td>
+<td> Eq. 7</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image8.gif" align="LEFT" width="180" height="44" alt="partial derivative with respect to T (T ln(Q) = ln(Q) + T/Q partial derivative with respect to T (Q)"></td>
+<td> Eq. 8</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image9.gif" align="LEFT" width="294" height="53" alt="messy second partial derivative wrto T"></td>
+<td> Eq. 9</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image10.gif" align="LEFT" width="237" height="46" alt="partial derivative of Q wrto T"></td>
+<td> Eq. 10</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image11.gif" align="LEFT" width="321" height="49" alt="partial second derivative of Q wrto T"></td>
+<td> Eq. 11</td>
+</tr>
+</tbody></table>
+
+Equation 4 is for the entropy, equation 5 for the heat capacity at constant volume, 
+equation 6 for the heat capacity at constant pressure, 
+and equation 7 for the enthalpy difference relative to absolute zero temperature. 
+<i>N</i> is Avogadro's number (6.022137 × 10<sup>23</sup>), 
+<i>k</i> is the Boltzmann constant (1.38066 × 10<sup>23</sup> J/K), 
+and the ideal-gas constant <i>R</i> &#8801; <i>Nk </i>(<a href="http://cccbdb.nist.gov/thermo.asp#ref4"><i>4</i></a>). 
+The last two terms inside the brackets in equation 4 arise from the indistinguishability 
+of identical molecules, 
+which requires a factor of (1/<i>N</i>!) in the partition function for the ensemble. 
+Expressions 4-7 may more easily be evaluated using equations 8-11 for the various derivatives. 
+
+<p><b>Practical Calculations</b>
+
+</p><p>A complete set of molecular energy levels is almost never available. 
+To simplify the problem, one usually adopts a model in which translation, 
+rotation, vibration, and electronic excitation are uncoupled. 
+In other words, one makes the approximation that the different types of motion 
+are unaffected by each other and do not mix together. 
+This leads to a separability of <i>Q</i> into four factors 
+that correspond to separate partition functions 
+for translation, rotation, vibration, and electronic excitation. 
+This is shown in equation 12, 
+where the explicit dependence upon temperature has been dropped for simplicity. 
+
+<br></p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image12.gif" align="LEFT" width="162" height="24" alt="Q = Qtrans Qrot Qvib Qelec"></td>
+<td> Eq. 12</td>
+</tr>
+</tbody></table>
+
+When electronically excited states are considered, 
+one often assumes that the translational, rotational, 
+and vibrational spectra of the excited state are the same as those of the ground electronic state. 
+This is crude, but is convenient when no other information is available. 
+Moreover, if the excited state lies far above <i>kT</i>, 
+the final results will not be sensitive to such details.
+
+<p>Different energy units are used conventionally in the fields of molecular spectroscopy, 
+quantum chemistry, and thermochemistry. 
+To provide some feeling for magnitudes, the values of the thermal energy <i>kT</i>, 
+at "room temperature" (298.15 K) and at 1000 K, 
+are listed in Table I in several units. 
+In this Appendix, all units are of the SI (<i>Système International</i>: kg, m, s, Pa, K) 
+unless otherwise indicated.
+
+</p><p>
+<b>Table I. Thermal energy (<i>kT</i>) at two temperatures, expressed in various units</b>
+</p><table border="" align="CENTER">
+<tbody><tr>
+<th>Unit </th>
+<th>Room temperature </th>
+<th> 1000 K</th>
+</tr>
+<tr>
+<td>kelvin (K)</td>
+<td class="num">298.15</td>
+<td class="num">1000</td>
+</tr>
+<tr>
+<td>wavenumber (cm<sup>-1</sup>)</td>
+<td class="num">207.2</td>
+<td class="num">695.0</td>
+</tr>
+<tr>
+<td>Hertz (s<sup>-1</sup>)</td>
+<td class="num">6.212 × 10<sup>12</sup></td>
+<td class="num">2.084 × 10<sup>13</sup></td>
+</tr>
+<tr>
+<td>kJ/mol</td>
+<td class="num">2.479</td>
+<td class="num">8.314</td>
+</tr>
+<tr>
+<td>kcal/mol</td>
+<td class="num">0.592</td>
+<td class="num">1.987</td>
+</tr>
+<tr>
+<td>electron volt (eV)</td>
+<td class="num">0.0257</td>
+<td class="num">0.0862</td>
+</tr>
+<tr>
+<td>hartree (atomic unit)</td>
+<td class="num">0.000944</td>
+<td class="num">0.003167</td>
+</tr>
+</tbody></table>
+
+<p>
+<b>Translational Partition Function.</b> 
+<br>Rigorously, <i>Q<sub>trans</sub></i> must be calculated from a sum over 
+all the translational energy levels that are available to a 
+molecule confined to a cubic box of volume <i>V</i> = <i>RT/p</i> 
+(molar volume of an ideal gas at temperature <i>T</i> and pressure <i>p</i>). 
+This is seldom done. 
+Instead, the sum is approximated as an integral to obtain equations 13-16. 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image13.gif" align="LEFT" width="169" height="29" alt="Qtrans="></td>
+<td> Eq. 13</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image14.gif" align="LEFT" width="378" height="24" alt="Strans="></td>
+<td> Eq. 14</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image15.gif" align="LEFT" width="118" height="24" alt="Cp,trans=(5/2) R"></td>
+<td> Eq. 15</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image16.gif" align="LEFT" width="196" height="22" alt="[H(T)-H(0)]trans=(5/2)RT"></td>
+<td> Eq. 16</td>
+</tr>
+</tbody></table>
+This approximation is good as long as 
+<i>m</i><sup>3/2</sup><i>T</i><sup>5/2</sup><i>p</i><sup>-1</sup> &gt;&gt; <i>h</i><sup>3</sup>
+(2&#960;)<sup>-3/2</sup><i>k</i><sup>-5/2</sup> (<a href="http://cccbdb.nist.gov/thermo.asp#ref3"><i>3</i></a>). 
+At the standard pressure <i>p</i> = 1 bar = 10<sup>5</sup> Pa = 0.986923 atm, 
+this condition is met for sufficiently heavy molecules, 
+<i>m</i> (in amu) &gt;&gt; 11.4 <i>T</i><sup> -5/3</sup>, 
+and for sufficiently high temperatures, 
+<i>T</i> &gt;&gt; 4.31 <i>m</i><sup>-3/5</sup> (<i>m</i> expressed in amu). 
+Fortunately, this covers the conditions of common chemical interest. 
+For an atomic ideal gas, there is no vibrational or rotational motion.
+
+<p>As an example, we can calculate the standard entropy for neon ideal gas at <i>T</i> = 298.15 K. 
+The atomic mass is converted to SI units using the equivalence 
+<i>N<sub>A</sub></i> amu = 0.001 kg, 
+where <i>N<sub>A</sub></i> = 6.022 × 10<sup>23</sup> mol<sup>-1</sup> 
+is the Avogadro constant. 
+Thus for <sup>20</sup>Ne (<i>m</i> = 19.992 amu), 
+<i>m</i> = 3.320 × 10<sup>-26</sup> kg. 
+The values of the physical constants are 
+<i>h</i> = 6.626 × 10<sup>-34</sup> J s, 
+<i>k</i> = 1.381 × 10<sup>-23</sup> J K<sup>-1</sup>, 
+and <i>R</i> = <i>kN<sub>A</sub></i> = 8.3145 J mol<sup>-1</sup> K<sup>-1</sup> 
+(<i><a href="http://cccbdb.nist.gov/thermo.asp#ref7">7</a>,<a href="http://cccbdb.nist.gov/thermo.asp#ref4">4</a></i>). 
+The standard pressure is <i>p</i> = 10<sup>5</sup> Pa. 
+Substituting these values into equation 14 yields 
+<i>S</i><sub>298.15</sub>(<sup>20</sup>Ne) = 146.21 J mol<sup>-1</sup> K<sup>-1</sup>. 
+For <sup>21</sup>Ne (<i>m</i> = 20.994 amu), 
+<i>S</i><sub>298.15</sub>(<sup>21</sup>Ne) = 146.82 J mol<sup>-1</sup> K<sup>-1</sup>, 
+and for <sup>22</sup>Ne (<i>m</i> = 21.991 amu), 
+<i>S</i><sub>298.15</sub>(<sup>22</sup>Ne) = 147.40 J mol<sup>-1</sup> K<sup>-1</sup>. 
+Averaging these values using the natural abundances of 90.48%, 0.27%, and 9.25%, 
+respectively (<i><a href="http://cccbdb.nist.gov/thermo.asp#ref7">7,8</a></i>), 
+we find <i>S</i><sub>298.15</sub> = 146.32 J mol<sup>-1</sup> K<sup>-1</sup> 
+for the naturally occurring isotopic distribution. 
+This agrees well with the accepted value of 146.33 J mol<sup>-1</sup> K<sup>-1</sup> 
+(<a href="http://cccbdb.nist.gov/thermo.asp#ref9"><i>9</i></a>).
+
+
+</p><p>
+<a name="rot"><b>Rotational Partition Function.</b>
+</a> 
+</p><p>The free rotation of a rigid molecule is also quantized 
+(the angular momentum and its projection are integer multiples of 
+<i>h</i>/2&#960;), 
+so the rotational energy is restricted to certain discrete levels. 
+Rotational spectra are characterized by the constants 
+<i>A</i>,<i> B</i>,<i> </i>and <i>C</i>, 
+where <i>A</i> &#8801; <i>h</i>/(8&#960;<sup>2</sup><i>I<sub>A</sub></i>) 
+and likewise for <i>B</i> and <i>C</i>. 
+The quantities <i>I<sub>A,B,C</sub></i> are the principal moments of inertia of the molecule, 
+with the convention <i>I<sub>A</sub></i> &#8804; <i>I<sub>B</sub></i> &#8804; <i>I<sub>C</sub></i> 
+(or <i>A</i> &#8805; <i>B</i> &#8805; <i>C</i>). 
+Many computer programs, including <i>ab initio</i> packages, 
+report the rotational constants when provided with a molecular geometry. 
+The moments can also be calculated manually as the eigenvalues of the inertial tensor, 
+which has elements like 
+<img src="./CCCBDB Essential Statistical Thermodynamics_files/image17.gif" width="118" height="24" alt="Ixy=-SUM(mi xi yi)"> and 
+<img src="./CCCBDB Essential Statistical Thermodynamics_files/image18.gif" width="148" height="29" alt="Ixx=SUM(mi(yi^2+zi^2))">, 
+where the index <i>i</i> runs over all atoms in the molecule 
+and the coordinate origin is at the center of mass. 
+
+The product of moments of inertia is all that is needed for the partition function, 
+not the individual eigenvalues of the inertial tensor, 
+and the product can be obtained directly from the elements:
+</p><div style="text-align:center"><i>
+I<sub>A</sub> I<sub>B</sub> I<sub>C</sub> = 
+I<sub>xx</sub> I<sub>yy</sub> I<sub>zz</sub> + 2 I<sub>xy</sub> I<sub>xz</sub> I<sub>yz</sub>
+- I<sub>xx</sub> I<sub>yz</sub><sup>2</sup> - I<sub>yy</sub> I<sub>xz</sub><sup>2</sup> - I<sub>zz</sub> I<sub>xy</sub><sup>2</sup>
+</i></div>
+
+<br>Linear molecules (<i>I<sub>A</sub></i> = 0) are described by a single rotational constant, <i>B</i>, 
+and a single moment of inertia, <i>I</i>. 
+Details may be found in textbooks of molecular spectroscopy. 
+
+<p>Fortunately, at high enough temperatures 
+(<i>kT</i> &gt;&gt; <i>hA</i>), 
+the sum can be replaced by an integral as it is for translation. 
+In the general case, the rotational partition function is given by equation 17. 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image19.gif" align="LEFT" width="432" height="45" alt="Qrot="></td>
+<td> Eq. 17</td>
+</tr>
+</tbody></table>
+<br>
+For linear molecules, equation 18 should be used instead. 
+<br>
+<table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image20.gif" align="LEFT" width="201" height="45" alt="Qrot,linear="></td>
+<td> Eq. 18</td>
+</tr>
+</tbody></table>
+<br>
+In these and subsequent equations, the symbol &#963; 
+denotes the "rotational symmetry number" or "external symmetry number" for the molecule. 
+This is the number of unique orientations of the rigid molecule that only interchange identical atoms. 
+It preserves parity restrictions on the interchange of identical nuclei when summation 
+is replaced by integration. 
+Identifying the correct symmetry number is a common point of difficulty; 
+it is discussed further below.
+
+<p>For the typical case (equation 17), 
+the thermodynamic functions are given by equations 19-21. 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image21.gif" align="LEFT" width="457" height="48" alt="Srot="></td>
+<td>Eq. 19</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image22.gif" align="LEFT" width="108" height="24" alt="Cp,rot=(3/2)R"></td>
+<td>Eq. 20</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image23.gif" align="LEFT" width="186" height="22" alt="[H(T)-H(0)]rot=(3/2)RT"></td>
+<td>Eq. 21</td>
+</tr>
+</tbody></table>
+For linear molecules (equation 18), equations 22-24 are used instead.
+<br>
+<table align="CENTER">
+<tbody><tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image24.gif" align="LEFT" width="366" height="25" alt="Srot,linear="></td>
+<td>Eq. 22</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image25.gif" align="LEFT" width="72" height="28" alt="Cp,rot,linear=R"></td>
+<td>Eq. 23</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image26.gif" align="LEFT" width="160" height="28" alt="[H(T)-H(0)]rot,linear=RT"></td>
+<td>Eq. 24</td>
+</tr>
+</tbody></table>
+
+<p><b>External Symmetry Number.</b> 
+</p><p>Some computer programs, such as many <i>ab initio</i> packages, 
+determine the molecular symmetry and external symmetry number (&#963;) automatically. 
+If such a program is unavailable, &#963; may be determined by hand. 
+With practice, this becomes very fast. 
+
+</p><p>If you are familiar enough with group theory to identify the molecule's point group 
+(<a href="http://cccbdb.nist.gov/thermo.asp#ref10"><i>10</i></a>), then &#963; can be determined from Table II 
+(<a href="http://cccbdb.nist.gov/thermo.asp#ref11"><i>11</i></a>). 
+Without identifying the point group, 
+one can count manually the number of orientations of the rigid molecule 
+that interchange only identical atoms.
+</p><p><b>Table II. Symmetry numbers corresponding to symmetry point groups</b>
+</p><table border="1">
+<tbody><tr><th>Group</th>
+    <th>&#963;</th>
+    <th>Group</th>
+    <th>&#963;</th>
+    <th>Group</th>
+    <th>&#963;</th>
+    <th>Group</th>
+    <th>&#963;</th>
+</tr>
+<tr><td><i>C</i><sub>1</sub>, <i>C<sub>i</sub></i>, <i>C<sub>s</sub></i>, <i>C</i><sub>&#8734;<i>v</i></sub></td>
+    <td>1</td>
+    <td><i>D</i><sub>&#8734;<i>h</i></sub></td>
+    <td>2</td>
+    <td><i>T</i>, <i>T<sub>d</sub></i></td>
+    <td>12</td>
+    <td><i>O<sub>h</sub></i></td>
+    <td>24</td>
+</tr>
+<tr><td><i>C<sub>n</sub></i>, <i>C<sub>nv</sub></i>, <i>C<sub>nh</sub></i></td>
+    <td><i>n</i></td>
+    <td><i>D<sub>n</sub></i>, <i>D<sub>nh</sub></i>, <i>D<sub>nd</sub></i></td>
+    <td>2<i>n</i></td>
+    <td><i>S<sub>n</sub></i></td>
+    <td><i>n</i>/2</td>
+    <td><i>I<sub>h</sub></i></td>
+    <td>60</td>
+</tr>
+</tbody></table>
+
+<p>For example, the benzene molecule (C<sub>6</sub>H<sub>6</sub>) 
+belongs to the <i>D</i><sub>6<i>h</i></sub> point group. 
+From Table II, &#963; = 12. 
+Alternatively, one can draw the molecule as a hexagon with numbered vertices. 
+Rotating the drawing by <i>n</i> × 60°, 
+where <i>n</i> runs from 0 to 5, generates six different orientations 
+that are distinguished only by the artificial numbering of the vertices. 
+Each of these six orientations can be flipped over to generate another orientation, 
+for a total of 12 unique orientations, &#963; = 12.
+
+</p><p>Another example is methyl chloride, CH<sub>3</sub>Cl. 
+This belongs to the <i>C</i><sub>3<i>v</i></sub> point group, 
+so &#963; = 3. 
+Alternatively, one can artificially number the hydrogen atoms 
+and see that there are three unique orientations, 
+related by rotations of <i>n</i> × 120° 
+(<i>n</i> = 0-2) around the C-Cl bond axis.
+
+</p><p>Chlorobenzene, C<sub>6</sub>H<sub>5</sub>Cl, 
+belongs to the <i>C</i><sub>2<i>v</i></sub> point group, 
+so &#963; = 2. 
+Alternatively, one can again number the hydrogen atoms 
+and see that there are two unique orientations, 
+related by rotations of <i>n</i> × 180° 
+(<i>n</i> = 0-1) around the C-Cl bond axis. 
+In contrast, toluene (C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub>) 
+belongs to the <i>C<sub>s</sub></i> point group, so &#963; = 1. 
+There are no ways to rotate or flip the molecule <i>rigidly</i> that will leave it unchanged. 
+Allowing the methyl group to rotate leads to an <i>internal</i> 
+symmetry number which is discussed below, 
+following the section on internal rotation.
+
+</p><p><b>Vibrational Partition Function.</b> 
+
+</p><p>To complete the simple rigid-rotator/harmonic oscillator (RRHO) model, 
+one must consider the molecular vibrations. 
+As indicated in the discussion of ZPE (equation 1), 
+a molecule that contains <i>N</i> atoms 
+has 3<i>N</i>-6 vibrational frequencies (3<i>N</i>-5 for linear molecules). 
+The partition function is given in equation 25, 
+where the product runs over all vibrational frequencies v<i><sub>i</sub></i>. 
+The corresponding thermodynamic functions are given by equations 26-28.
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image27.gif" align="LEFT" width="156" height="42" alt="Qvib="></td>
+<td> Eq. 25</td>
+</tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image28.gif" align="LEFT" width="340" height="49" alt="Svib="></td><td> Eq. 26</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image29.gif" align="LEFT" width="230" height="60" alt="Cp,vib="></td><td> Eq. 27</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image30.gif" align="LEFT" width="297" height="49" alt="[H(T)-H(0)]vib="></td><td> Eq. 28</td></tr>
+</tbody></table>
+
+<p><b>Example: Hydrogen Fluoride</b>. 
+Earlier we used the results of <i>ab initio</i> calculations 
+to obtain a value for &#916;<sub>f</sub><i>H</i>°<sub>0</sub>(HF). 
+The other equations above permit us to compute <i>ab initio</i> thermodynamic functions, 
+which will provide an enthalpy of formation at the more useful temperature of 298.15 K. 
+Results are summarized in <a href="http://cccbdb.nist.gov/thermo.asp#table3">Table III</a>. 
+For simplicity, we will neglect the naturally occurring heavy isotopes of hydrogen. 
+The molecular weight of <sup>1</sup>H<sup>19</sup>F is 20.006 amu. 
+Using equation 14, as done above for neon, 
+leads to <i>S<sub>trans</sub></i> = 146.22 J mol<sup>-1</sup> K<sup>-1</sup>. 
+HF is a linear molecule, so we use equation 22 to calculate <i>S<sub>rot</sub></i>. 
+The <i>ab initio</i> calculation reports a rotational constant 
+<i>B</i> = 605.64 GHz = 6.0564 × 10<sup>11</sup> s<sup>-1</sup> 
+based upon the calculated B3LYP/6-31G(d) equilibrium geometry and the most common isotopes. 
+This molecule belongs to the <i>C</i><sub>&#8734;<i>v</i></sub> point group 
+(&#963; = 1); 
+there are no identical nuclei that can be interchanged by any rotation. 
+Hence <i>S<sub>rot</sub></i> = 27.67 J mol<sup>-1</sup> K<sup>-1</sup>. 
+For the vibrational contribution, 
+we scale the B3LYP/6-31G(d) frequency of 3987 cm<sup>-1</sup> by 1.0015 
+as suggested for entropies (<i>5</i>) to obtain &#957; = 3993 cm<sup>-1</sup>. 
+This is multiplied by the speed of light, 
+<i>c</i> = 2.998 × 10<sup>10</sup> cm s<sup>-1</sup> 
+(<i><a href="http://cccbdb.nist.gov/thermo.asp#ref7">7</a>,<a href="http://cccbdb.nist.gov/thermo.asp#ref4">4</a></i>), 
+to convert wavenumbers to SI frequency units, 
+&#957; = 1.197 × 10<sup>14</sup> s<sup>-1</sup>. 
+Thus <i>h</i>&#957;/<i>kT</i> = 19.27 and equation 26 yields 
+<i>S<sub>vib</sub></i> = 7.22 × 10<sup>-7</sup> J mol<sup>-1</sup> K<sup>-1</sup>. 
+The total entropy is 
+<i>S</i><sub>298.15</sub> = 
+  <i>S<sub>trans</sub></i> + 
+  <i>S<sub>rot</sub></i> + 
+  <i>S<sub>vib</sub></i> = 173.89 J mol<sup>-1</sup> K<sup>-1</sup>, 
+in good agreement with the accepted value of 173.78 J mol<sup>-1</sup> K<sup>-1</sup> (<a href="http://cccbdb.nist.gov/thermo.asp#ref9"><i>9</i></a>).
+
+</p><p>For enthalpy and heat capacity, 
+the B3LYP/6-31G(d) frequency is scaled by 0.9989 (<i>5</i>) to obtain &#957; = 3983 cm<sup>-1</sup>. 
+The heat capacity <i>C<sub>p</sub></i>(HF) is calculated using equations 15, 23, and 27, 
+leading to 
+<i>C<sub>p</sub></i> = 
+  <i>C<sub>p, trans</sub></i> + 
+  <i>C<sub>p, rot</sub></i> + 
+  <i>C<sub>p, vib</sub></i> = 
+  (5/2)<i>R</i> + 
+  <i>R</i> + 
+  1.38 × 10<sup>-5</sup> J mol<sup>-1</sup> K<sup>-1</sup> = 
+  29.10 J mol<sup>-1</sup> K<sup>-1</sup>. 
+This compares well with the accepted value of 29.14 J mol<sup>-1</sup> K<sup>-1</sup> (<a href="./CCCBDB Essential Statistical Thermodynamics_files/CCCBDB Essential Statistical Thermodynamics.html"><i>1</i></a>). 
+Finally, the enthalpy difference can be computed using equations 16, 24, and 28 to be 
+[<i>H</i>(298.15)-<i>H</i>(0)] = 
+  (5/2) <i>RT</i> + 
+  <i>RT</i> + 
+  2.14 × 10<sup>-4</sup> J mol<sup>-1</sup> = 
+  8.68 kJ mol<sup>-1</sup>. 
+This can be used to compute &#916;<sub>f</sub><i>H</i>°<sub>298.15</sub>(HF) = 
+&#916;<sub>f</sub><i>H</i>°<sub>0</sub>(HF) + 
+[<i>H</i>(298.15)-
+<i>H</i>(0)]<sub>HF</sub> - 
+[<i>H</i>(298.15)-<i>H</i>(0)]<sub>elements</sub>. 
+Taking the <i>ab initio</i> value &#916;<sub>f</sub><i>H</i>°<sub>0</sub>(HF) = 
+-272.0 kJ/mol from above, 
+the calculated enthalpy difference of 8.68 kJ/mol for HF, 
+and the accepted enthalpy differences of (8.47)/2 and (8.83)/2 kJ/mol 
+for (1/2)H<sub>2</sub> and (1/2)F<sub>2</sub> (<i>9</i>), 
+we obtain &#916;<sub>f</sub><i>H</i>°<sub>298.15</sub>(HF) = -272.0 kJ/mol, 
+in agreement with the accepted value of -273.3 ± 0.7 kJ mol<sup>-1</sup> (<a href="http://cccbdb.nist.gov/thermo.asp#ref9"><i>9</i></a>) 
+[-272.5 ± 0.8 kJ/mol is listed in older ref (<a href="./CCCBDB Essential Statistical Thermodynamics_files/CCCBDB Essential Statistical Thermodynamics.html"><i>1</i></a>)].
+
+</p><p><b><a id="table3" name="table3">Table III</a>. Results for Hydrogen Fluoride Example</b>
+</p><table border="1">
+<tbody><tr><th>Contribution</th>
+    <th><i>S</i>, J/(mol K)</th>
+    <th><i>C<sub>p</sub></i>, J/(mol K)</th>
+    <th>[<i>H</i>(298.15)-<i>H</i>(0)], kJ/mol</th>
+</tr>
+<tr><td>Translation</td>
+    <td class="num">146.22</td>
+    <td class="num">20.79</td>
+    <td class="num">6.20</td>
+</tr>
+<tr><td>Rotation</td>
+    <td class="num">27.67</td>
+    <td class="num">8.31</td>
+    <td class="num">2.48</td>
+</tr>
+<tr><td>Vibration</td>
+    <td class="num">7 × 10<sup>-7</sup></td>
+    <td class="num">1 × 10<sup>-5</sup></td>
+    <td class="num">2 × 10<sup>-4</sup></td>
+</tr>
+<tr><td><i>Total</i></td>
+    <td class="num"><i>173.89</i></td>
+    <td class="num"><i>29.10</i></td>
+    <td class="num"><i>8.68</i></td>
+</tr>
+</tbody></table>
+
+<p><b>Electronic Partition Function.</b> 
+Although they may not have low-lying electronic excited states, 
+some molecules have degenerate electronic ground states. 
+Free radicals are a common example. 
+They may have unpaired electrons in their electronic ground states 
+and a net electron spin of <i>S</i> = <i>n<sub>unpaired</sub></i>/2, 
+where <i>n<sub>unpaired</sub></i> is the number of unpaired electrons. 
+(Beware not to confuse the spin quantum number <i>S</i> with the entropy.) 
+The multiplicity, or degeneracy <i>g</i>, of such a state is <i>g</i> = (2<i>S</i>+1). 
+Using degeneracy numbers is equivalent to an explicit count of all states, including degenerate ones. 
+Thus, <i>Q<sub>elec</sub></i> = <i>g</i> is a constant and only affects the entropy: 
+<i>S<sub>elec</sub></i> = <i>R</i>ln(<i>g</i>) and
+<i>C<sub>p, elec</sub></i> = [<i>H</i>(<i>T</i>)-<i>H</i>(0)]<i><sub>elec</sub></i> = 0. 
+Since most free radicals have only a single unpaired electron, 
+the usual effect is to increase the entropy by <i>R</i>ln(2). 
+In addition to spin degeneracies, some states have spatial degeneracies. 
+This situation is most common for diatomic molecules. 
+Linear molecules with a spatial symmetry other than &#931;
+(e.g., &#928; or &#916;) 
+have a spatial degeneracy of 2. 
+For example, the OH radical has a <sup>2</sup>&#928; ground state, 
+so its degeneracy is <i>g = </i>2 (spin) × 2 (spatial) = 4. 
+If there are both spin and spatial degeneracies, spin-orbit coupling lifts the degeneracy, often significantly. 
+In the example of OH, the 4-fold degenerate ground state is split into 
+two doubly-degenerate levels separated by 139.2 cm<sup>-1</sup> (<a href="http://cccbdb.nist.gov/thermo.asp#ref6"><i>6</i></a>). 
+In such a case the low-lying excited states should be included in the calculation of thermodynamic quantities. 
+The partition function is given by equation 29, 
+where &#949;<i><sub>i</sub></i> 
+and <i>g<sub>i</sub></i> are the excitation energies (spectroscopic <i>T</i><sub>0</sub>) 
+and degeneracies of the excited states, 
+<i>g</i><sub>0</sub> and &#949;<sub>0</sub> &#8801; 0 
+are for the ground state, and the sum runs over all the electronic states being considered, 
+including the ground state. 
+The contributions to the thermal functions are given by equations 30-32. 
+This treatment assumes, rather crudely, 
+that the rotations and vibrations are unaffected by electronic excitation.
+<br>
+</p><table align="CENTER">
+<tbody><tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image31.gif" align="LEFT" width="166" height="24" alt="Qelec="></td><td> Eq. 29</td> </tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image32.gif" align="LEFT" width="310" height="49" alt="Selec="></td><td> Eq. 30</td> </tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image33.gif" align="LEFT" width="509" height="80" alt="Cp,elec="></td><td> Eq. 31</td> </tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image34.gif" align="LEFT" width="276" height="49" alt="[H(T)-H(0)]elec="></td><td> Eq. 32</td> </tr>
+</tbody></table>
+
+<p><b>Example: Entropy of Methyl Radical.</b> 
+For simplicity, we again neglect minor isotopes. 
+Results are summarized in <a href="http://cccbdb.nist.gov/thermo.asp#table4">Table IV</a>. 
+The molecular weight of CH<sub>3</sub> is then <i>m</i> = 15.023 amu, 
+so <i>S<sub>trans</sub></i> = 142.65 J mol<sup>-1</sup> K<sup>-1</sup>. 
+This is a flat, triangular molecule that belongs to the <i>D</i><sub>3<i>h</i></sub> point group, 
+&#963; = 6. 
+The experimental bond length is <i>r<sub>e</sub></i> = 1.0767 Å = 
+1.0767 × 10<sup>-10</sup> m (<a href="http://cccbdb.nist.gov/thermo.asp#ref12"><i>12-14</i></a>). 
+The moments of inertia can be evaluated using the symmetry of this oblate top, 
+or more generally by diagonalizing the inertial tensor. 
+We place the molecule in the <i>yz</i> plane with one hydrogen atom on the <i>z</i> axis. 
+The center of mass coincides with the carbon atom. 
+The cartesian coordinates then lead to an inertial tensor with components 
+<i>I<sub>xx</sub></i> = 3<i>m</i><sub>H</sub><i>r<sub>e</sub></i><sup>2</sup>, 
+<i>I<sub>xy</sub></i> = <i>I<sub>yx</sub></i> = 0, 
+<i>I<sub>xz</sub></i> = <i>I<sub>zx</sub></i> = 0, 
+<i>I<sub>yy</sub></i> = (3/2)<i>m</i><sub>H</sub><i>r<sub>e</sub></i><sup>2</sup>, 
+<i>I<sub>yz</sub></i> = <i>I<sub>zy</sub></i> = 0, and 
+<i>I<sub>zz</sub></i> = (3/2)<i>m</i><sub>H</sub><i>r<sub>e</sub></i><sup>2</sup> = 2.910 
+× 10<sup>-47</sup> kg m<sup>2</sup>. 
+This is already diagonal, with eigenvalues 
+<i>I<sub>A</sub></i> = 
+<i>I<sub>B</sub></i> = 2.910 × 10<sup>-47</sup> kg m<sup>2</sup> and 
+<i>I<sub>C</sub></i> = 5.820 kg m<sup>2</sup> 
+so that <i>S<sub>rot</sub></i> = 43.50 J mol<sup>-1</sup> K<sup>-1</sup> (equation 19). 
+The observed vibrational frequencies of CH<sub>3</sub> are 
+3004.4, 606.5, 3160.8, and 1396 cm<sup>-1</sup> 
+for &#957;<sub>1</sub>, &#957;<sub>2</sub>, 
+&#957;<sub>3</sub>, and &#957;<sub>4</sub> respectively (<i>15</i>). 
+Since &#957;<sub>3</sub> and &#957;<sub>4</sub> 
+are both doubly degenerate (e&#8242; symmetry), 
+they are counted twice and we have the correct number of vibrations, 3<i>N</i>-6 = 6. 
+Converting to SI units leads to <i>S<sub>vib</sub></i> = 
+6.51 × 10<sup>-5</sup> + 1.84 + 
+6.42 × 10<sup>-5</sup> + 0.15 = 
+1.99 J mol<sup>-1</sup> K<sup>-1</sup>. 
+In this case, this is a radical with one unpaired electron, <i>S</i> = 1/2 
+(electronic ground state is <sup>2</sup>A<sub>2</sub>&#8243;), 
+so the degeneracy <i>g</i> = 2 and <i>S<sub>elec</sub></i> = <i>R</i>ln(2). 
+Adding the four contributions to the entropy gives <i>S</i><sub>298.15</sub> = 
+193.9 J mol<sup>-1</sup> K<sup>-1</sup>, 
+in agreement with the literature value of 194.2 ± 1.3 J mol<sup>-1</sup> K<sup>-1</sup> (<a href="./CCCBDB Essential Statistical Thermodynamics_files/CCCBDB Essential Statistical Thermodynamics.html"><i>1</i></a>).
+
+</p><p><b>Example: Entropy of Hydroxyl Radical.</b> 
+For simplicity, we again neglect minor isotopes. 
+Results are summarized in <a href="http://cccbdb.nist.gov/thermo.asp#table4">Table IV</a>. 
+The molecular weight of OH is then <i>m</i> = 17.003 amu, 
+so <i>S<sub>trans</sub></i> = 144.19 J mol<sup>-1</sup> K<sup>-1</sup>. 
+Again using the simple RRHO model, 
+the observed bond length is <i>r<sub>e</sub></i> = 0.96966 Å (<a href="http://cccbdb.nist.gov/thermo.asp#ref6"><i>6</i></a>) 
+and the symmetry number &#963; = 1 
+(<i>C</i><sub>&#8734;<i>v</i></sub> point group). 
+Hence <i>I</i> = 1.480 × 10<sup>-47</sup> kg&nbsp;m<sup>2</sup> 
+and <i>S<sub>rot</sub></i> = 28.22 J mol<sup>-1</sup> K<sup>-1</sup>. 
+Using the observed vibrational fundamental for the vibrational frequency, 
+&#957; = &#969;<sub>0</sub> = 3568 cm<sup>-1</sup> (<a href="http://cccbdb.nist.gov/thermo.asp#ref6"><i>6</i></a>) leads to 
+<i>S<sub>vib</sub></i> = 5.04 × 10<sup>-6</sup> J mol<sup>-1</sup> K<sup>-1</sup>. 
+If spin-orbit splitting is ignored, <i>Q<sub>elec</sub></i> = 4 as explained above, 
+so <i>S<sub>elec</sub></i> = 11.53 J mol<sup>-1</sup> K<sup>-1</sup>. 
+Combining these four contributions yields <i>S</i> = 183.9 J mol<sup>-1</sup> K<sup>-1</sup>. 
+If instead the spin-orbit splitting is included, 
+so that <i>g</i><sub>0</sub> = <i>g</i><sub>1</sub> = 2 and 
+&#949;<sub>1</sub> = 139.2 cm<sup>-1</sup> = 
+2.765 × 10<sup>-21</sup> J, 
+then equation 30 yields <i>S<sub>elec</sub></i> = 11.08 J mol<sup>-1</sup> K<sup>-1</sup> 
+and so the total <i>S</i> = 183.5 J mol<sup>-1</sup> K<sup>-1</sup>. 
+The literature value is 183.71 ± 0.04 J mol<sup>-1</sup> K<sup>-1</sup> (<i>1</i>).
+
+</p><p>
+<b><a name="table4">Table IV</a>. Methyl and Hydroxyl Examples, 
+<i>S</i>°<sub>298</sub>, J/(mol K)</b>
+</p><table border="1">
+<tbody><tr><th>Contribution</th>
+    <th>Methyl</th>
+    <th>Hydroxyl<sup>a</sup></th>
+    <th>Hydroxyl<sup>b</sup></th>
+</tr>
+<tr><td>Translation</td>
+    <td class="num">142.65</td>
+    <td class="num">144.19</td>
+    <td class="num">144.19</td>
+</tr>
+<tr><td><p>Rotation</p></td>
+    <td class="num">43.50</td>
+    <td class="num">28.22</td>
+    <td class="num">28.22</td>
+</tr>
+<tr><td>Vibration</td>
+    <td class="num">1.99</td>
+    <td class="num">5 × 10<sup>-6</sup></td>
+    <td class="num">5 × 10<sup>-6</sup></td>
+</tr>
+<tr><td>Electronic</td>
+    <td class="num">5.76</td>
+    <td class="num">11.53</td>
+    <td class="num">11.08</td>
+</tr>
+<tr><td><i>Total</i></td>
+    <td class="num"><i>193.9</i></td>
+    <td class="num"><i>183.9</i></td>
+    <td class="num"><i>183.5</i></td>
+</tr>
+</tbody></table>
+<i><sup>a</sup></i>Spin-orbit splitting ignored. 
+<i><sup>b</sup></i>Spin-orbit splitting included.
+
+<p><b>Internal Rotation.</b>
+This refers to torsional motion, most commonly involving methyl groups. 
+There are three ways to treat such a rotor, depending upon its barrier to rotation. 
+The free and hindered rotor models require that an internal symmetry number, 
+&#963;<i><sub>int</sub></i>, be included. 
+&#963;<i><sub>int</sub></i> equals the number of minima (or maxima) 
+in the torsional potential energy curve. 
+The harmonic oscillator model does not require &#963;<i><sub>int</sub></i> 
+because it ignores all but one of the energy minima. 
+For intermediate barrier heights (hindered rotor), 
+the appropriateness of an internal symmetry number may be confusing. 
+In such cases, avoid over- or under-counting states by ensuring that the 
+limiting case of infinite barriers 
+(harmonic oscillator model, no &#963;<i><sub>int</sub></i>) 
+moves smoothly into the limiting case of zero barrier 
+(free rotor model, &#963;<i><sub>int</sub></i> needed) as the barrier height decreases. 
+Note that the vibrational frequency corresponding to the torsion must be deleted 
+if the torsion is treated as a free or hindered rotation.
+
+
+</p><p><b>Free Rotor.</b> 
+If the barrier to rotation is much less than <i>kT</i>, 
+then the rotor may be considered freely rotating. 
+For a symmetric rotor such as a methyl group, the partition function is given by equation 33, 
+where <i>I<sub>int</sub></i> is the reduced moment of inertia for the internal rotation 
+and is given by equation 34 (<a href="http://cccbdb.nist.gov/thermo.asp#ref3"><i>3</i></a>). 
+<br>
+</p><table align="CENTER">
+<tbody><tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image35.gif" align="LEFT" width="250" height="32" alt="Qfree rotor="></td><td>Eq. 33</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image36.gif" align="LEFT" width="208" height="53" alt="Iint="></td><td>Eq. 34</td></tr>
+</tbody></table>
+Asymmetric rotors can be treated using an appropriate formula for the reduced moment (<i>3</i>). 
+In equation 34, <i>I<sub>top</sub></i> is the moment of inertia of the rotating fragment 
+about the axis of internal rotation. 
+This is expressed as <img src="./CCCBDB Essential Statistical Thermodynamics_files/image37.gif" width="102" height="25" alt="Itop=">, 
+where the <i>m<sub>i</sub></i> are atomic masses, 
+<i>r<sub>i</sub></i> is the distance of atom <i>i</i> from the axis of internal rotation, 
+and the sum runs over all atoms in the rotating fragment. 
+The quantities 
+&#945;, &#946;, &#947; 
+are the cosines of the angles formed between the internal rotation axis 
+and the principal axes of the overall molecule that correspond to 
+<i>I<sub>A</sub></i>, <i>I<sub>B</sub></i>, and <i>I<sub>C</sub></i>, respectively. 
+Contributions to the thermodynamic functions are given in equations 35-37.
+<br>
+<table align="CENTER">
+<tbody><tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image38.gif" align="LEFT" width="376" height="28" alt="Sfree rotor="></td><td> Eq. 35</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image39.gif" align="LEFT" width="140" height="24" alt="Cp,free rotor="></td><td> Eq. 36</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image40.gif" align="LEFT" width="220" height="25" alt="[H(T)-H(0)]free rotor=(1/2)RT"></td><td> Eq. 37</td></tr>
+</tbody></table>
+
+<p><b>Harmonic Oscillator.</b> 
+If the barrier to internal rotation is much greater than <i>kT</i>, 
+one can consider the torsion to be a non-rotating, harmonic oscillator. 
+Treatment is the same as for other vibrations.
+
+</p><p><b>Hindered Rotor.</b> 
+This is the common, intermediate case, when the torsional barrier <i>V</i> is comparable to <i>kT</i>. 
+If the torsional potential is assumed to have the simple form 
+<img src="./CCCBDB Essential Statistical Thermodynamics_files/image41.gif" width="169" height="22" alt="U(phi)=V(1-cos(sigmaint phi))/2">, 
+then the tables of Pitzer and Gwinn are usually used to compute the contribution of the hindered rotor 
+to the thermodynamic functions (<i><a href="http://cccbdb.nist.gov/thermo.asp#ref16">16</a>,<a href="http://cccbdb.nist.gov/thermo.asp#ref17">17</a></i>). 
+Their tables are in terms of the dimensionless variables <i>x</i> and <i>y</i>, 
+where <img src="./CCCBDB Essential Statistical Thermodynamics_files/image42.gif" width="68" height="21" alt="x=V/(kT)"> and 
+<img src="./CCCBDB Essential Statistical Thermodynamics_files/image43.gif" width="178" height="25" alt="y="> 
+and <i>I<sub>int</sub></i> is defined as for a free rotor (see above). 
+
+</p><p><b>Example: Entropy of Ethane at <i>T</i> = 184 K </b>[adapted from ref (<i>17</i>)]. 
+Results are summarized in <a href="http://cccbdb.nist.gov/thermo.asp#table5">Table V</a>. 
+Ignoring minor isotopes as before, for C<sub>2</sub>H<sub>6</sub> we have <i>m</i> = 30.047 amu, 
+so <i>S<sub>trans</sub></i> = 141.26 J mol<sup>-1</sup> K<sup>-1</sup>. 
+The experimental geometry is staggered (<i>D</i><sub>3<i>d</i></sub> point group, &#963; = 6) 
+and defined by <i>r</i><sub>CC</sub> = 1.535 Å, 
+<i>r</i><sub>CH </sub>= 1.094 Å, and 
+&#952;<sub>CCH</sub> = 111.2° (<a href="http://cccbdb.nist.gov/thermo.asp#ref12"><i>12-14</i></a>). 
+If we choose coordinates so that the origin is at the center of mass, 
+the carbon atoms lie on the <i>z</i>-axis, 
+and the <i>yz</i> plane is a reflection plane of symmetry, then the elements of the inertial tensor are, 
+in (amu Å<sup>2</sup>), 
+<i>I<sub>xx</sub></i> = <i>I<sub>yy</sub></i> = 25.46, 
+<i>I<sub>xy</sub></i> = <i>I<sub>yx</sub></i> = 
+<i>I<sub>xz</sub></i> = <i>I<sub>zx</sub></i> = 
+<i>I<sub>yz</sub></i> = <i>I<sub>zy</sub></i> = 0, and 
+<i>I<sub>zz</sub></i> = 6.291 amu Å<sup>2</sup>. 
+This is already diagonal, 
+with eigenvalues 
+<i>I<sub>A</sub></i> = 1.045 × 10<sup>-46</sup> kg m<sup>2</sup> 
+and 
+<i>I<sub>B</sub></i> =<i>I<sub>C</sub></i> = 4.228 × 10<sup>-46</sup> kg m<sup>2</sup> 
+so that <i>S<sub>rot</sub></i> = 62.17 J mol<sup>-1</sup> K<sup>-1</sup> (equation 19). 
+The observed vibrational frequencies (<a href="http://cccbdb.nist.gov/thermo.asp#ref18"><i>18</i></a>) are 
+2954, 1388, 995, 289 (torsion), 2896, and 1379 <span class="nowrap">cm<sup>-1</sup></span> (non-degenerate), 
+and 2969, 1468, 1190, 2985, 1469, and 822 <span class="nowrap">cm<sup>-1</sup></span> (doubly degenerate), 
+for a total of 3<i>N</i>-6 = 18 vibrational modes and 
+<i>S<sub>vib</sub></i> = 3.36 J mol<sup>-1</sup> K<sup>-1</sup> 
+(0.25 J mol<sup>-1</sup> K<sup>-1</sup> excluding the torsional mode). 
+The total entropy in the RRHO model is thus 
+<i>S</i>°<sub>184</sub> = 206.8 J mol<sup>-1</sup> K<sup>-1</sup>, 
+which is below the experimental value <i>S</i> = 207.7 ± 0.6 J mol<sup>-1</sup> K<sup>-1</sup> (<a href="http://cccbdb.nist.gov/thermo.asp#ref17"><i>17</i></a>).
+
+</p><p>If we consider the torsion to be a free, unhindered rotor, 
+then we require the corresponding reduced moment of inertia. 
+In this case, in the rotor axis is aligned with the <i>A</i> axis of the molecule, 
+so that &#945; = 1 
+and &#946; = &#947;= 0 in equation 34. 
+This gives <i>I<sub>int</sub></i> = 
+<i>I<sub>top</sub></i> - <i>I<sub>top</sub></i><sup>2</sup>/<i>I<sub>A</sub></i>. 
+The symmetry of this molecule requires that <i>I<sub>A</sub></i> = 2<i>I<sub>top</sub></i>, 
+because the moment of inertia of the whole molecule around the <i>A</i> axis 
+(viz., the C-C bond axis) is twice that of a single methyl group. 
+Thus <i>I<sub>int</sub></i> = 2.613 × 10<sup>-47</sup> kg m<sup>2</sup>. 
+The internal symmetry number is &#963;<i><sub>int</sub></i> = 3, 
+since there are three equivalent values of the torsion angle (0°, 120°, and 240°). 
+Equation 35 yields <i>S<sub>free rotor</sub></i> = 10.09 J mol<sup>-1</sup> K<sup>-1</sup>, 
+for a total entropy of <i>S</i>°<sub>184</sub> = 213.8 J mol<sup>-1</sup> K<sup>-1</sup> 
+in the free-rotor model, which is higher than the experimental value.
+
+</p><p>To apply the hindered-rotor model we need a value for the torsional barrier height. 
+This can be estimated from the observed torsional vibrational frequency &#957;  
+(in s<sup>-1</sup>) as <i>V</i> 
+&#8776; 8&#960;<sup>2</sup><i>I<sub>int</sub></i>&#957;<sup>2</sup>/
+&#963;<i><sub>int</sub></i><sup>2</sup> = 
+1.720 × 10<sup>-20</sup> J (or 10.4 kJ/mol). 
+Thus the parameters are <i>x</i> = 6.77 and <i>y</i> = 0.490. 
+Interpolating within the standard tables 
+(<i><a href="http://cccbdb.nist.gov/thermo.asp#ref16">16</a>,<a href="http://cccbdb.nist.gov/thermo.asp#ref17">17</a></i>), 
+<i>S<sub>hindered rotor</sub></i> = 3.99 J mol<sup>-1</sup> K<sup>-1</sup>, 
+so that the total entropy is <i>S</i> = 207.7 J mol<sup>-1</sup> K<sup>-1</sup>, 
+in agreement with the experimental value.
+
+</p><p><b><a name="table5">Table V</a>. Ethane Example, <i>S</i>°<sub>184</sub> (J mol<sup>-1</sup> K<sup>-1</sup>)</b>
+</p><table border="1">
+<tbody><tr><th>Contribution</th>
+    <th>Harmonic Rotor</th>
+    <th>Free Rotor</th>
+    <th>Hindered Rotor</th>
+</tr>
+<tr><td>Translation</td>
+    <td class="num">141.26</td>
+    <td class="num">141.26</td>
+    <td class="num">141.26</td>
+</tr>
+<tr><td>Rotation</td>
+    <td class="num">62.17</td>
+    <td class="num">62.17</td>
+    <td class="num">62.17</td>
+</tr>
+<tr><td>Vibration</td>
+    <td class="num">0.25</td>
+    <td class="num">0.25</td>
+    <td class="num">0.25</td>
+</tr>
+<tr><td>Torsion</td>
+    <td class="num">3.11</td>
+    <td class="num">10.09</td>
+    <td class="num">3.99</td>
+</tr>
+<tr><td><i>Total</i></td>
+    <td class="num"><i>206.8</i></td>
+    <td class="num"><i>213.8</i></td>
+    <td class="num"><i>207.7</i></td>
+</tr>
+</tbody></table>
+
+
+
+<p><b>Charged Molecules: Two Conventions.</b> 
+The balanced chemical equation describing an ionization process involves at least one free electron. 
+There are two major conventions for the thermodynamic properties of the electron. 
+Most compilations of thermochemical data adopt the <i>thermal electron convention</i>. 
+In this convention, the free electron is treated as a chemical element, 
+so that its ideal-gas enthalpy of formation is zero at all temperatures. 
+In contrast, most of the literature in mass spectrometry and ion chemistry adopts the <i>ion convention</i>, 
+sometimes also called the <i>stationary electron convention</i>. 
+In this convention, the enthalpy content of the electron is ignored. 
+At absolute zero temperature there is no difference between the two conventions, 
+but in general enthalpies of formation under the two conventions are related by equation 38, 
+where <i>q</i> is the (signed) charge on the ion in question (±1 in most cases). 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image44.gif" align="LEFT" width="390" height="24" alt="Delta f thermal = Delta f ion + 5/2 qRT"></td>
+<td>Eq. 38</td>
+</tr>
+</tbody></table>
+A thorough discussion is provided in the introduction to the <i>GIANT</i> tables (<a href="http://cccbdb.nist.gov/thermo.asp#ref19"><i>19</i></a>). 
+When reporting the thermochemistry of ions, 
+it is important always to indicate which convention is being used. 
+Especially beware not to combine enthalpies of formation that were derived using different conventions.
+
+<p><b>Chemical Kinetics</b>
+</p><p>
+</p><p>The equilibrium constant for a reaction is 
+<i>K<sub>eq</sub></i> = exp(-&#916;<i>G</i>/<i>RT</i>), 
+where 
+&#916;<i>G</i> = 
+&#916;<i>H</i> - 
+<i>T</i>&#916;<i>S</i> 
+and the differences are between the reactants and products, e.g., 
+&#916;<i>S</i> = 
+<i>S<sub>products</sub></i> - 
+<i>S<sub>reactants</sub></i>. 
+Simple transition-state theory for chemical kinetics assumes that 
+the reaction rate is limited by formation of a transient <i>transition state</i>, 
+which is the point of maximum energy along the path from reactants to products. 
+The transition state is considered to be in quasi-equilibrium with the reactants. 
+If differences between reactants and the transition state are denoted with a double dagger, 
+e.g., &#916;<i>S</i><sup>‡</sup> = <i>S<sub>TS</sub></i> - <i>S<sub>reactants</sub></i>, 
+then the rate constant (denoted <i>r</i> here to avoid confusion with the Boltzmann constant) 
+is given by equation 39. 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image45.gif" align="LEFT" width="156" height="49" alt="r(T)="></td>
+<td>Eq. 39</td>
+</tr>
+</tbody></table>
+As for stable species, 
+&#916;<i>G</i><sup>‡</sup> = 
+&#916;<i>H</i><sup>‡</sup> - 
+<i>T</i>&#916;<i>S</i><sup>‡</sup>. 
+Thus rate constants can be calculated easily from the "thermochemistry" for transition states. 
+In such calculations, the imaginary vibrational frequency is ignored, 
+so that there are only 3<i>N</i>-7 molecular vibrations in the transition structure (3<i>N</i>-6 if linear). 
+If all internal and external symmetry numbers are included in the rotational partition functions, 
+then any reaction path degeneracy will usually be included automatically. 
+Occasionally, however, stereochemical factors are also needed (<a href="http://cccbdb.nist.gov/thermo.asp#ref20"><i>20</i></a>).
+
+<p>Experimental, temperature-dependent rate constants are often presented as 
+an <i>Arrhenius plot</i> of <i>r</i>(<i>T</i>) vs. 1/<i>T</i>. 
+This is motivated by the observation that such plots are nearly linear, 
+<i>r</i>(<i>T</i>) = <i>A</i> exp(-<i>E<sub>a</sub></i>/<i>RT</i>), 
+where the pre-exponential factor <i>A</i> is usually called simply the <i>A-factor</i> 
+and <i>E<sub>a</sub></i> is the phenomenological <i>activation energy</i>. 
+It is often desirable to report <i>A</i> and <i>E<sub>a</sub></i> in computational studies, 
+for comparison with the values derived from experimental data. 
+They may be determined using equations 40 and 41, 
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image46.gif" align="LEFT" width="241" height="41" alt="Ea = "></td>
+<td>Eq. 40</td>
+</tr>
+<tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image47.gif" align="LEFT" width="156" height="21" alt="A="></td>
+<td>Eq. 41</td>
+</tr>
+</tbody></table>
+where <i>M</i> is the molecularity of the reaction 
+(e.g., <i>M</i> = 1 for a unimolecular and <i>M</i> = 2 for a bimolecular reaction). 
+The derived <i>A</i> and <i>E<sub>a</sub></i> are weakly temperature-dependent. 
+This is consistent with experimental results, 
+which are often fitted using the three-parameter modified Arrhenius expression 
+<i>r</i>(<i>T</i>) = <i>A' T<sup>n</sup> </i>exp(-<i>E'<sub>a</sub></i>/<i>RT</i>). 
+This functional form leads to a better fit than the ordinary Arrhenius expression, 
+but the parameters may have little physical interpretation. 
+If the RRHO approximation is accepted, 
+then the three parameters are given by equations 42-44, 
+where the <i>y<sub>i</sub></i> in equation 42 are the reduced vibrational frequencies, 
+<i>y<sub>i</sub></i> = <i>h</i>&#957;<i><sub>i</sub></i>/<i>kT</i>. 
+However, in practice it is often best to determine the parameters <i>A'</i>, 
+<i>n</i>, and E'<sub>a</sub>
+by fitting calculated rate constants to the modified Arrhenius expression.
+
+<br>
+<table align="CENTER">
+<tbody><tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image50.gif" align="LEFT" width="436" height="106" alt="n="></td><td> Eq. 42</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image51.gif" align="LEFT" width="412" height="53" alt="Ea="></td><td> Eq. 43</td></tr>
+<tr><td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image52.gif" align="LEFT" width="254" height="39" alt="A&#39;="></td><td> Eq. 44</td></tr>
+</tbody></table>
+
+<p><i>Ab initio</i> energies are now precise enough that it is becoming common 
+to use kinetic theories more sophisticated than simple transition-state theory. 
+When the reaction coordinate is dominated by motion of a hydrogen atom, 
+corrections for quantum-mechanical tunneling are often made (<a href="http://cccbdb.nist.gov/thermo.asp#ref21"><i>21</i></a>). 
+The simplest is the Wigner correction, 
+which requires only the imaginary vibrational frequency 
+&#957;<sup>‡</sup><i>i</i>
+associated with the reaction coordinate. 
+To apply this correction, the calculated rate is multiplied by <i>F<sub>tunnel</sub></i> (equation 45).
+
+<br>
+</p><table align="CENTER">
+<tbody><tr>
+<td><img src="./CCCBDB Essential Statistical Thermodynamics_files/image53.gif" align="LEFT" width="190" height="53" alt="Ftunnel="></td>
+<td>Eq. 45</td>
+</tr>
+</tbody></table>
+
+Better results may be obtained by 
+fitting the energy profile of the reaction to an Eckart potential function 
+(see the chapter by Petersson in this book). 
+The location of the transition state can also be refined. 
+Variational transition-state theory defines the transition state as the maximum 
+in the free energy along the reaction path, 
+instead of the maximum along the vibrationless potential energy curve. 
+Such a definition is essential for reactions such as simple bond cleavage, 
+which usually has no barrier in excess of the bond energy.
+
+<p id="units"><b>Units and Constants</b>
+</p><p>In actual calculations, many practical difficulties involve incompatible units. 
+In addition to the standard units of the SI, many others are in use, 
+usually for historical reasons. 
+Conversion factors among selected units are provided in Table VI. 
+For convenience, the values of commonly-used constants are collected in Table VII. 
+Detailed information is available on-line at 
+<a href="http://www.physics.nist.gov/PhysRefData/contents.html" target="TOP">http://www.physics.nist.gov/PhysRefData/contents.html</a>.
+
+</p><p><b>Table VI. Unit Conversions</b>
+</p><table border="1">
+<tbody><tr><th>Quantity</th>
+    <th>Unit</th>
+    <th>Conversion<sup>a</sup></th>
+    <th>SI Unit</th>
+</tr>
+<tr><td>energy</td>
+    <td>hartree (atomic unit)</td>
+    <td class="num">2625.500</td>
+    <td>kJ/mol</td>
+</tr>
+<tr><td>energy</td>
+    <td>cal</td>
+    <td class="num">4.184</td>
+    <td>J</td>
+</tr>
+<tr><td>energy</td>
+    <td>cm<sup>-1</sup> (wavenumber)</td>
+    <td class="num">0.01196266</td>
+    <td>kJ/mol</td>
+</tr>
+<tr><td>energy</td>
+    <td>eV</td>
+    <td class="num">96.48531</td>
+    <td>kJ/mol</td>
+</tr>
+<tr><td>energy</td>
+    <td>K (temperature)</td>
+    <td class="num">8.314511 × 10<sup>-3</sup></td>
+    <td>kJ/mol</td>
+</tr>
+<tr><td>distance</td>
+    <td>Å</td>
+    <td class="num">10<sup>-10</sup></td>
+    <td>m</td>
+</tr>
+<tr><td>distance</td>
+    <td>bohr (atomic unit)</td>
+    <td class="num">5.291772 × 10<sup>-11</sup></td>
+    <td>m</td>
+</tr>
+<tr><td>mass</td>
+    <td>amu <i>or</i> u</td>
+    <td class="num">1.660540 × 10<sup>-27</sup></td>
+    <td>kg</td>
+</tr>
+<tr><td>pressure</td>
+    <td>bar</td>
+    <td class="num">10<sup>5</sup></td>
+    <td>Pa</td>
+</tr>
+<tr><td>pressure</td>
+    <td>atm</td>
+    <td class="num">101325</td>
+    <td>Pa</td>
+</tr>
+<tr><td>pressure</td>
+    <td>Torr <i>or</i> mm-Hg</td>
+    <td class="num">133.32237</td>
+    <td>Pa</td>
+</tr>
+<tr><td>pressure (density)</td>
+    <td>cm<sup>-3</sup> (at 298.15 K; ideal gas)</td>
+    <td class="num">4.16643 × 10<sup>-15</sup></td>
+    <td>Pa</td>
+</tr>
+<tr><td>pressure (density)</td>
+    <td>cm<sup>-3</sup> (arb. temp.; ideal gas)</td>
+    <td class="num">10<sup>6</sup> <i>kT</i></td>
+    <td>Pa</td>
+</tr>
+<tr><td>pressure (density)</td>
+    <td>M <i>or</i> mol/L (ideal gas)</td>
+    <td class="num">10<sup>3</sup> <i>RT</i></td>
+    <td>Pa</td>
+</tr>
+<tr><td>dipole moment</td>
+    <td>atomic unit</td>
+    <td class="num">8.478358 × 10<sup>-30</sup></td>
+    <td>C m</td>
+</tr>
+<tr><td>dipole moment</td>
+    <td>D (debye)</td>
+    <td class="num">3.335641 × 10<sup>-30</sup></td>
+    <td>C m</td>
+</tr>
+</tbody></table>
+<i><sup>a</sup></i>Multiply the quantity expressed in the units of column 2 
+by the conversion factor in column 3 
+to obtain the quantity expressed in units of column 4 (SI units).
+
+<p><b>Table VII. Physical Constants</b>
+</p><table border="1">
+<tbody><tr><th>Quantity</th>
+    <th>Value</th>
+</tr>
+<tr><td><i>k</i></td>
+    <td class="num">1.38066 × 10<sup>-23</sup> J K<sup>-1</sup></td>
+</tr>
+<tr><td><i>N<sub>A</sub></i></td>
+    <td class="num">6.022137 × 10<sup>23</sup> mol<sup>-1</sup></td>
+</tr>
+<tr><td><i>R</i> = <i>kN<sub>A</sub></i></td>
+    <td class="num">8.314510 J mol<sup>-1</sup> K<sup>-1</sup></td>
+</tr>
+<tr><td><i>h</i></td>
+    <td class="num">6.626076 × 10<sup>-34</sup> J s</td>
+</tr>
+<tr><td><i>c</i></td>
+    <td class="num">299792458 m s<sup>-1</sup></td>
+</tr>
+</tbody></table>
+
+
+<p></p><center><h3>Literature Cited</h3></center>
+<i>By selecting these links, you will be leaving
+          NIST webspace. We have provided these
+          links to other web sites because they may
+          have information that would be of interest to
+          you. No inferences should be drawn on
+          account of other sites being referenced, or
+          not, from this page. There may be other
+          web sites that are more appropriate for your
+          purpose. NIST does not necessarily endorse
+          the views expressed, or concur with the
+          facts presented on these sites. Further, NIST
+          does not endorse any commercial products
+          that may be mentioned on these sites. Please
+          address comments about this page to
+          cccbdb@nist.gov
+</i>
+<p>
+<a name="ref1">1.</a> Chase, M. W., Jr.; Davies, C. A.; Downey, J. R., Jr.; Frurip, D. J.; McDonald, R. A.; Syverud, A. N. <i>J. Phys. Chem. Ref. Data</i> <b>1985</b>, <i>14</i>, Suppl. 1.</p>
+<p>
+<a name="ref2">2.</a> <i>Thermodynamic Properties of Individual Substances</i>; 4th ed.; Gurvich, L. V.; Veyts, I. V.; Alcock, C. B., Eds.; Hemisphere: New York, 1989.</p>
+<p>
+<a name="ref3">3.</a> Frenkel, M.; Marsh, K. N.; Wilhoit, R. C.; Kabo, G. J.; Roganov, G. N. <i>Thermodynamics of Organic Compounds in the Gas State</i>; Thermodynamics Research Center: College Station, Texas, 1994; Vol. I.</p>
+<p>
+<a name="ref4">4.</a> Cohen, E. R.; Taylor, B. N. <i>The 1986 CODATA Recommended Values of the Fundamental Physical Constants</i>; <a href="http://physics.nist.gov/PhysRefData" target="codatawindow"> http://physics.nist.gov/PhysRefData</a>. </p>
+<p>
+<a name="ref5">5.</a> Scott, A. P.; Radom, L. <i>J. Phys. Chem.</i> <b>1996</b>, <i>100</i>, 16502.</p>
+<p>
+<a name="ref6">6.</a> Huber, K. P.; Herzberg, G. <i>Molecular Spectra and Molecular Structure: IV. Constants of Diatomic Molecules</i>; van Nostrand Reinhold: New York, 1979.</p>
+<p>
+<a name="ref7">7.</a> <i>CRC Handbook of Chemistry and Physics</i>; 76th ed.; Lide, D. R.; Frederikse, H. P. R., Eds.; CRC Press: Boca Raton, 1995.
+</p><p>
+<a name="ref8">8.</a> Winter, M. <i>WebElements</i>; <a href="http://www.webelements.com/" target="elementswindow">http://www.webelements.com</a>.
+</p><p>
+<a name="ref9">9.</a> Cox, J. D.; Wagman, D. D.; Medvedev, V. A. <i>CODATA Key Values for Thermodynamics</i>; Hemisphere: New York, 1989.</p>
+<p <a="" name="ref10">10. Cotton, F. A. <i>Chemical Applications of Group Theory</i>; 2nd ed.; Wiley--Interscience: New York, 1971.</p>
+<p>
+<a name="ref11">11.</a> Herzberg, G. <i>Molecular Spectra and Molecular Structure: II. Infrared and Raman Spectra of Polyatomic Molecules</i>; van Nostrand: New York, 1945.</p>
+<p>
+<a name="ref12">12.</a> <i>Structure Data of Free Polyatomic Molecules</i>; Kuchitsu, K., Ed.; <i>Landolt-Börnstein New Series</i>; Madelung, O., Ed.; Springer: Berlin, 1992; Vol. II:21.</p>
+<p>
+<a name="ref13">13.</a> <i>Structure Data of Free Polyatomic Molecules</i>; Hellwege, K.-H.; Hellwege, A. M., Eds.; <i>Landolt-Börnstein New Series</i>; Madelung, O., Ed.; Springer: Berlin, 1987; Vol. II:15.</p>
+<p>
+<a name="ref14">14.</a> <i>Structure Data of Free Polyatomic Molecules</i>; Hellwege, K.-H.; Hellwege, A. M., Eds.; <i>Landolt-Börnstein New Series</i>; Hellwege, K.-H., Ed.; Springer: Berlin, 1976; Vol. II:7.</p>
+<p>
+<a name="ref15">15.</a> Jacox, M. E. <i>Vibrational &amp; Electronic Energy Levels of Small Polyatomic Transient Molecules (VEEL): Version 4.0</i>; NIST-SRD 26 (electronic database); Natl. Inst. of Standards and Technology: Gaithersburg, MD, 1995.</p>
+<p>
+<a name="ref16">16.</a> Pitzer, K. S.; Gwinn, W. D. <i>J. Chem. Phys.</i> <b>1942</b>, <i>10</i>, 428.</p>
+<p>
+<a name="ref17">17.</a> Janz, G. J. <i>Thermodynamic Properties of Organic Compounds</i>; Academic: New York, 1967.</p>
+<p>
+<a name="ref18">18.</a> Shimanouchi, T. <i>Tables of Molecular Vibrational Frequencies, Consolidated Volume I</i>; NSRDS-NBS 39; U.S. GPO: Washington, D.C., 1972.</p>
+<p>
+<a name="ref19">19.</a> Lias, S. G.; Bartmess, J. E.; Liebman, J. F.; Holmes, J. L.; Levin, R. D.; Mallard, W. G. <i>J. Phys. Chem. Ref. Data</i> <b>1988</b>, <i>17</i>, Suppl. 1.</p>
+<p>
+<a name="ref20">20.</a> Gilbert, R. G.; Smith, S. C. <i>Theory of Unimolecular and Recombination Reactions</i>; Blackwell Scientific: Oxford, 1990.</p>
+<p>
+<a name="ref21">21.</a> Bell, R. P. <i>The Tunnel Effect in Chemistry</i>; Chapman and Hall: London, 1980.</p>
+
+
+
+</body></html>
